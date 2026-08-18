@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studio Rias Ayunda — Katalog Riasan</title>
-<meta name="description" content="Katalog interaktif jasa makeup artist. Unggah foto karya dan atur paket layananmu sendiri.">
+<meta name="description" content="Katalog jasa makeup artist. Lihat portofolio dan pilihan paket riasan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,90 +30,138 @@
   h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
   a{text-decoration:none;}
 
-  .editable{outline:none;cursor:text;border-radius:6px;transition:background .15s;}
-  .editable:hover{background:rgba(201,162,39,.10);}
-  .editable:focus{background:rgba(201,162,39,.16);box-shadow:0 0 0 1px var(--emas);}
+  /* ---- Editable state: NONAKTIF sampai mode edit dibuka ---- */
+  .editable{outline:none;border-radius:6px;transition:background .15s;}
+  body.edit-mode .editable{cursor:text;}
+  body.edit-mode .editable:hover{background:rgba(201,162,39,.10);}
+  body.edit-mode .editable:focus{background:rgba(201,162,39,.16);box-shadow:0 0 0 1px var(--emas);}
   .editable:empty:before{content:attr(data-placeholder);color:var(--cokelat-muda);}
+
+  body:not(.edit-mode) .pkg-remove,
+  body:not(.edit-mode) .item-del,
+  body:not(.edit-mode) .add-item-btn,
+  body:not(.edit-mode) .add-pkg-btn,
+  body:not(.edit-mode) .arch-edit-dot{ display:none !important; }
 
   .wrap{max-width:1160px;margin:0 auto;padding-left:6vw;padding-right:6vw;}
 
   /* --- Nav --- */
-  nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;}
-  .logo{display:flex;align-items:center;gap:10px;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;}
+  .logo{display:flex;align-items:center;gap:10px;min-width:0;}
   .logo-mark{width:34px;height:34px;border-radius:50%;background:var(--marun);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .logo-mark svg{width:16px;height:16px;stroke:var(--emas-muda);}
-  .logo-name{font-size:18px;font-weight:600;color:var(--marun);}
-  .btn-nav{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:999px;background:var(--marun);color:var(--gading);font-size:13px;font-weight:600;}
+  .logo-name{font-size:18px;font-weight:600;color:var(--marun);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .btn-nav{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--marun);color:var(--gading);font-size:13px;font-weight:600;flex-shrink:0;}
+  .btn-nav svg{width:15px;height:15px;stroke:var(--gading);}
 
   /* --- Hero --- */
-  header.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:28px 0 10px;}
-  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--emas);margin-bottom:14px;}
-  .hero-title{font-size:clamp(34px,5vw,54px);font-weight:600;font-style:italic;line-height:1.1;color:var(--cokelat);margin-bottom:18px;}
-  .hero-desc{font-size:16px;line-height:1.7;color:var(--cokelat-muda);max-width:460px;margin-bottom:26px;}
+  header.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:20px 0 10px;}
+  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);margin-bottom:14px;}
+  .hero-title{font-size:clamp(30px,5vw,54px);font-weight:600;font-style:italic;line-height:1.1;color:var(--cokelat);margin-bottom:16px;}
+  .hero-desc{font-size:16px;line-height:1.7;color:var(--cokelat-muda);max-width:460px;margin-bottom:24px;}
   .btn-outline{display:inline-block;padding:13px 30px;border-radius:999px;border:1.5px solid var(--marun);color:var(--marun);font-size:14px;font-weight:600;letter-spacing:.02em;}
 
   /* --- Arch upload frame --- */
-  .arch{position:relative;overflow:hidden;cursor:pointer;border:2px solid var(--emas);background-size:cover;background-position:center;flex-shrink:0;}
+  .arch{position:relative;overflow:hidden;background-size:cover;background-position:center;flex-shrink:0;border:2px solid var(--emas);}
+  body:not(.edit-mode) .arch{cursor:default;}
+  body.edit-mode .arch{cursor:pointer;}
   .arch-hero{height:380px;border-radius:190px 190px 10px 10px;box-shadow:0 0 0 5px var(--gading),0 0 0 6px var(--emas-muda);}
   .arch-gallery{height:180px;border-radius:90px 90px 10px 10px;box-shadow:0 0 0 5px var(--gading),0 0 0 6px var(--emas-muda);}
   .arch-pkg{height:200px;border-radius:100px 100px 10px 10px;box-shadow:0 0 0 5px var(--gading),0 0 0 6px var(--emas-muda);}
   .arch-empty{background:linear-gradient(160deg,var(--blush),var(--krem));}
   .arch-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--marun);text-align:center;padding:0 20px;}
-  .arch-placeholder svg{width:28px;height:28px;stroke-width:1.5;}
+  .arch-placeholder svg{width:26px;height:26px;stroke-width:1.5;}
   .arch-placeholder span{font-size:13px;font-weight:500;}
-  .arch-edit-dot{position:absolute;bottom:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(46,26,20,.55);display:none;align-items:center;justify-content:center;}
+  .arch-edit-dot{position:absolute;bottom:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(46,26,20,.55);align-items:center;justify-content:center;}
   .arch-edit-dot svg{width:14px;height:14px;stroke:#fff;}
-  .has-img .arch-edit-dot{display:flex;}
+  body.edit-mode .has-img .arch-edit-dot{display:flex;}
   .arch input[type=file]{display:none;}
 
   /* --- Divider --- */
-  .divider{display:flex;justify-content:center;gap:10px;margin:8px 0 36px;flex-wrap:wrap;}
+  .divider{display:flex;justify-content:center;gap:10px;margin:8px 0 32px;flex-wrap:wrap;}
   .dot-round{width:5px;height:5px;border-radius:50%;background:var(--emas);}
   .dot-diamond{width:5px;height:5px;background:var(--blush);transform:rotate(45deg);}
 
   /* --- Sections --- */
-  .section-label{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--emas);text-align:center;margin:0 0 8px;}
-  .section-title{font-size:28px;font-weight:600;text-align:center;color:var(--marun);margin:0 0 30px;}
+  .section-label{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);text-align:center;margin:0 0 8px;}
+  .section-title{font-size:26px;font-weight:600;text-align:center;color:var(--marun);margin:0 0 28px;}
 
-  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;}
 
   /* --- Packages --- */
-  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;}
+  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
   .pkg-card{background:var(--gading);border-radius:18px;padding:20px;border:1px solid var(--blush);display:flex;flex-direction:column;gap:16px;position:relative;}
-  .pkg-remove{position:absolute;top:10px;right:10px;z-index:5;width:26px;height:26px;border-radius:50%;background:rgba(46,26,20,.55);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .15s;}
-  .pkg-card:hover .pkg-remove{opacity:1;}
+  .pkg-remove{position:absolute;top:10px;right:10px;z-index:5;width:26px;height:26px;border-radius:50%;background:rgba(46,26,20,.55);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
+  body.edit-mode .pkg-remove{display:flex;}
   .pkg-remove svg{width:14px;height:14px;stroke:#fff;}
-  .pkg-title{font-family:'Fraunces',serif;font-size:21px;font-weight:600;color:var(--marun);text-align:center;letter-spacing:.01em;}
+  .pkg-title{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--marun);text-align:center;letter-spacing:.01em;}
   .pkg-price{font-size:15px;font-weight:600;color:var(--emas);text-align:center;margin-top:4px;letter-spacing:.03em;}
   .pkg-items-head{border-top:1px dashed var(--blush);padding-top:14px;}
   .pkg-items-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cokelat-muda);margin:0 0 10px;}
   .item-row{display:flex;align-items:flex-start;gap:8px;}
   .item-row .bullet{color:var(--marun);font-size:14px;line-height:22px;flex-shrink:0;}
   .item-row .item-text{flex:1;font-size:14px;color:var(--cokelat);line-height:22px;}
-  .item-del{border:none;background:none;color:var(--cokelat-muda);cursor:pointer;padding:2px;opacity:0;transition:opacity .15s;}
-  .item-row:hover .item-del{opacity:1;}
+  .item-del{border:none;background:none;color:var(--cokelat-muda);cursor:pointer;padding:2px;flex-shrink:0;}
+  body.edit-mode .item-del{display:inline-flex;}
   .item-del svg{width:13px;height:13px;}
   .item-list{display:flex;flex-direction:column;gap:8px;}
-  .add-item-btn{margin-top:10px;display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--marun);font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;font-family:inherit;}
+  .add-item-btn{margin-top:10px;align-items:center;gap:6px;background:none;border:none;color:var(--marun);font-size:13px;font-weight:600;cursor:pointer;padding:4px 0;font-family:inherit;}
+  body.edit-mode .add-item-btn{display:flex;}
   .add-item-btn svg{width:14px;height:14px;}
 
-  .add-pkg-btn{min-height:260px;border-radius:18px;border:1.5px dashed var(--emas);background:transparent;color:var(--marun);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;transition:background .15s,color .15s;font-family:inherit;width:100%;}
+  .add-pkg-btn{min-height:200px;border-radius:18px;border:1.5px dashed var(--emas);background:transparent;color:var(--marun);flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;transition:background .15s,color .15s;font-family:inherit;width:100%;}
+  body.edit-mode .add-pkg-btn{display:flex;}
   .add-pkg-btn:hover{background:var(--marun);color:var(--gading);}
   .add-pkg-btn svg{width:22px;height:22px;}
 
   /* --- Footer --- */
-  footer{margin:70px auto 40px;}
-  .footer-box{background:var(--marun);border-radius:22px;padding:40px 6vw;text-align:center;}
-  .footer-title{font-style:italic;font-size:26px;color:var(--gading);margin-bottom:10px;}
+  footer{margin:60px auto 100px;}
+  .footer-box{background:var(--marun);border-radius:22px;padding:36px 6vw;text-align:center;}
+  .footer-title{font-style:italic;font-size:24px;color:var(--gading);margin-bottom:10px;}
   .footer-desc{color:var(--blush);font-size:14px;margin-bottom:22px;}
   .btn-wa{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:999px;background:var(--emas);color:var(--marun-gelap);font-size:14px;font-weight:700;transition:transform .15s ease;}
   .btn-wa:hover{transform:translateY(-2px);}
   .btn-wa svg{width:16px;height:16px;}
-  .btn-nav svg{width:15px;height:15px;stroke:var(--gading);}
 
+  /* --- Tombol gembok mode edit (khusus pemilik akun) --- */
+  .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 4px 14px rgba(46,26,20,.3);}
+  body.edit-mode .edit-fab{background:var(--marun);}
+  .edit-fab svg{width:19px;height:19px;stroke:#fff;}
+
+  .toast{position:fixed;bottom:78px;right:20px;background:var(--cokelat);color:var(--gading);font-size:13px;font-weight:500;padding:10px 16px;border-radius:10px;z-index:999;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:260px;}
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  /* ---- Tablet ---- */
+  @media (max-width:860px){
+    header.hero{grid-template-columns:1fr;gap:32px;}
+    header.hero .arch-hero{order:-1;height:300px;border-radius:150px 150px 10px 10px;}
+  }
+
+  /* ---- HP ---- */
   @media (max-width:640px){
-    header.hero{grid-template-columns:1fr;}
-    header.hero .arch-hero{order:-1;}
+    .wrap{padding-left:5.5vw;padding-right:5.5vw;}
+    nav{padding:16px 0;}
+    .logo-name{font-size:16px;}
+    header.hero{padding:12px 0 6px;}
+    .hero-desc{font-size:15px;max-width:100%;}
+    .btn-outline{width:100%;text-align:center;padding:14px 20px;}
+    .arch-hero{height:240px;border-radius:120px 120px 10px 10px;}
+    .arch-pkg{height:170px;border-radius:85px 85px 10px 10px;}
+    .arch-gallery{height:130px;border-radius:65px 65px 10px 10px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+    .pkg-grid{grid-template-columns:1fr;gap:18px;}
+    .section-title{font-size:22px;margin-bottom:22px;}
+    .divider{margin:4px 0 26px;}
+    .footer-box{padding:30px 6vw;}
+    .footer-title{font-size:21px;}
+    footer{margin:44px auto 90px;}
+  }
+
+  /* ---- HP kecil ---- */
+  @media (max-width:380px){
+    .arch-hero{height:210px;border-radius:105px 105px 10px 10px;}
+    .gallery-grid{grid-template-columns:1fr 1fr;}
+    .arch-gallery{height:110px;border-radius:55px 55px 10px 10px;}
   }
 </style>
 </head>
@@ -124,7 +172,7 @@
     <div class="logo-mark">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4z"/></svg>
     </div>
-    <span class="logo-name editable" contenteditable data-key="studioName">Studio Rias Ayunda</span>
+    <span class="logo-name editable" contenteditable="false" data-key="studioName">Studio Rias Ayunda</span>
   </div>
   <a class="btn-nav" id="waNavBtn" href="#" target="_blank" rel="noreferrer">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -134,9 +182,9 @@
 
 <header class="hero wrap">
   <div>
-    <p class="eyebrow editable" contenteditable data-key="eyebrow">Makeup Artist & Hairdo Profesional</p>
-    <h1 class="hero-title editable" contenteditable data-key="heroTitle">Riasan yang Bercerita</h1>
-    <p class="hero-desc editable" contenteditable data-key="heroDesc">Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template.</p>
+    <p class="eyebrow editable" contenteditable="false" data-key="eyebrow">Makeup Artist &amp; Hairdo Profesional</p>
+    <h1 class="hero-title editable" contenteditable="false" data-key="heroTitle">Riasan yang Bercerita</h1>
+    <p class="hero-desc editable" contenteditable="false" data-key="heroDesc">Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template.</p>
     <a class="btn-outline" href="#paket">Lihat Paket Riasan</a>
   </div>
   <div class="arch arch-hero arch-empty" id="heroArch" data-key="heroImage">
@@ -176,9 +224,19 @@
   </div>
 </footer>
 
+<button class="edit-fab" id="editFab" title="Mode edit (khusus pemilik)" aria-label="Buka mode edit">
+  <svg id="fabIconLocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <svg id="fabIconUnlocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+</button>
+<div class="toast" id="toast"></div>
+
 <script>
 (function(){
   var STORAGE_KEY = 'katalogMuaData';
+  // Bisa isi lebih dari satu kode di sini, tiap kode dipisah koma.
+  // Contoh: kamu bisa kasih kode berbeda ke tiap pembeli/admin.
+  var EDIT_PINS = ['2026', '2026-AYUNDA', '2026-ADMIN'];
+
   var iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
   var iconPlus = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
   var iconCamera = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
@@ -186,6 +244,7 @@
 
   var idCounter = 200;
   function nextId(){ return idCounter++; }
+  var editMode = false;
 
   var defaultData = {
     studioName: "Studio Rias Ayunda",
@@ -229,6 +288,14 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
   }
 
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
   function updateWaLinks(){
     var url = 'https://wa.me/' + data.waNumber.replace(/[^0-9]/g,'');
     document.getElementById('waNavBtn').href = url;
@@ -238,12 +305,13 @@
   function bindEditable(el, key){
     el.textContent = data[key] || '';
     el.addEventListener('blur', function(){
+      if(!editMode) return;
       data[key] = el.textContent;
       save();
     });
   }
 
-  function setupArch(el, getImage, setImage, height, label, sizeClass){
+  function setupArch(el, getImage, setImage, label){
     var input = el.querySelector('input[type=file]');
     function render(){
       var img = getImage();
@@ -253,9 +321,13 @@
         el.style.backgroundImage = "url('" + img + "')";
         var ph = el.querySelector('.arch-placeholder');
         if(ph) ph.remove();
+      } else {
+        el.classList.add('arch-empty');
+        el.classList.remove('has-img');
       }
     }
     el.addEventListener('click', function(e){
+      if(!editMode) return;
       if(e.target.closest('input')) return;
       input.click();
     });
@@ -273,7 +345,7 @@
     render();
   }
 
-  function makeArchElement(className, height, label){
+  function makeArchElement(className, label){
     var div = document.createElement('div');
     div.className = 'arch ' + className + ' arch-empty';
     div.innerHTML =
@@ -297,9 +369,9 @@
     var grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
     data.gallery.forEach(function(g){
-      var el = makeArchElement('arch-gallery', 180, 'Unggah karya');
+      var el = makeArchElement('arch-gallery', 'Unggah karya');
       grid.appendChild(el);
-      setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 180, 'Unggah karya');
+      setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 'Unggah karya');
     });
   }
 
@@ -316,31 +388,32 @@
       removeBtn.title = 'Hapus paket';
       removeBtn.innerHTML = iconTrash;
       removeBtn.addEventListener('click', function(){
+        if(!editMode) return;
         data.packages = data.packages.filter(function(p){ return p.id !== pkg.id; });
         save();
         renderPackages();
       });
       card.appendChild(removeBtn);
 
-      var archEl = makeArchElement('arch-pkg', 200, 'Unggah foto hasil riasan');
+      var archEl = makeArchElement('arch-pkg', 'Unggah foto hasil riasan');
       card.appendChild(archEl);
-      setupArch(archEl, function(){ return pkg.image; }, function(v){ pkg.image = v; }, 200, 'Unggah foto hasil riasan');
+      setupArch(archEl, function(){ return pkg.image; }, function(v){ pkg.image = v; }, 'Unggah foto hasil riasan');
 
       var titleWrap = document.createElement('div');
       titleWrap.style.textAlign = 'center';
 
       var titleEl = document.createElement('h3');
       titleEl.className = 'pkg-title editable';
-      titleEl.contentEditable = true;
+      titleEl.contentEditable = editMode;
       titleEl.textContent = pkg.title;
-      titleEl.addEventListener('blur', function(){ pkg.title = titleEl.textContent; save(); });
+      titleEl.addEventListener('blur', function(){ if(!editMode) return; pkg.title = titleEl.textContent; save(); });
       titleWrap.appendChild(titleEl);
 
       var priceEl = document.createElement('p');
       priceEl.className = 'pkg-price editable';
-      priceEl.contentEditable = true;
+      priceEl.contentEditable = editMode;
       priceEl.textContent = pkg.price;
-      priceEl.addEventListener('blur', function(){ pkg.price = priceEl.textContent; save(); });
+      priceEl.addEventListener('blur', function(){ if(!editMode) return; pkg.price = priceEl.textContent; save(); });
       titleWrap.appendChild(priceEl);
 
       card.appendChild(titleWrap);
@@ -369,9 +442,9 @@
 
           var textEl = document.createElement('span');
           textEl.className = 'item-text editable';
-          textEl.contentEditable = true;
+          textEl.contentEditable = editMode;
           textEl.textContent = it.text;
-          textEl.addEventListener('blur', function(){ it.text = textEl.textContent; save(); });
+          textEl.addEventListener('blur', function(){ if(!editMode) return; it.text = textEl.textContent; save(); });
           row.appendChild(textEl);
 
           var delBtn = document.createElement('button');
@@ -379,6 +452,7 @@
           delBtn.innerHTML = iconTrash;
           delBtn.title = 'Hapus item';
           delBtn.addEventListener('click', function(){
+            if(!editMode) return;
             pkg.items = pkg.items.filter(function(x){ return x.id !== it.id; });
             save();
             renderItems();
@@ -395,6 +469,7 @@
       addItemBtn.className = 'add-item-btn';
       addItemBtn.innerHTML = iconPlus + ' Tambah yang didapat';
       addItemBtn.addEventListener('click', function(){
+        if(!editMode) return;
         pkg.items.push({ id: nextId(), text: 'Item baru, klik untuk edit' });
         save();
         renderItems();
@@ -409,6 +484,7 @@
     addCard.className = 'add-pkg-btn';
     addCard.innerHTML = iconPlus + ' Tambah Paket';
     addCard.addEventListener('click', function(){
+      if(!editMode) return;
       data.packages.push({
         id: nextId(), image: null, title: 'Paket Baru', price: 'Rp 0',
         items: [{ id: nextId(), text: 'Klik untuk edit item ini' }]
@@ -419,6 +495,36 @@
     grid.appendChild(addCard);
   }
 
+  function refreshAllEditableAttrs(){
+    document.querySelectorAll('.editable').forEach(function(el){
+      el.contentEditable = editMode;
+    });
+  }
+
+  function setEditMode(v){
+    editMode = v;
+    document.body.classList.toggle('edit-mode', v);
+    document.getElementById('fabIconLocked').style.display = v ? 'none' : 'block';
+    document.getElementById('fabIconUnlocked').style.display = v ? 'block' : 'none';
+    refreshAllEditableAttrs();
+  }
+
+  document.getElementById('editFab').addEventListener('click', function(){
+    if(editMode){
+      setEditMode(false);
+      showToast('Mode edit dimatikan. Perubahan tersimpan.');
+    } else {
+      var pin = window.prompt('Masukkan PIN untuk mengedit halaman ini:');
+      if(pin === null) return;
+      if(EDIT_PINS.indexOf(pin) !== -1){
+        setEditMode(true);
+        showToast('Mode edit aktif. Ketuk teks atau foto untuk mengubahnya.');
+      } else {
+        showToast('PIN salah.');
+      }
+    }
+  });
+
   // ---- init ----
   bindEditable(document.querySelector('[data-key="studioName"]'), 'studioName');
   bindEditable(document.querySelector('[data-key="eyebrow"]'), 'eyebrow');
@@ -426,7 +532,7 @@
   bindEditable(document.querySelector('[data-key="heroDesc"]'), 'heroDesc');
 
   var heroArch = document.getElementById('heroArch');
-  setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 380, 'Unggah foto andalanmu di sini');
+  setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 'Unggah foto andalanmu di sini');
 
   renderDivider('divider1');
   renderDivider('divider2');
