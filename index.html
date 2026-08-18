@@ -122,6 +122,11 @@
   .btn-wa{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:999px;background:var(--emas);color:var(--marun-gelap);font-size:14px;font-weight:700;transition:transform .15s ease;}
   .btn-wa:hover{transform:translateY(-2px);}
   .btn-wa svg{width:16px;height:16px;}
+  .wa-number-edit{display:none;margin:14px 0 0;font-size:12px;color:var(--blush);}
+  body.edit-mode .wa-number-edit{display:block;}
+  .wa-number-edit .editable{color:var(--emas-muda);font-weight:600;}
+  body.edit-mode .wa-number-edit .editable:hover{background:rgba(228,203,134,.18);}
+  body.edit-mode .wa-number-edit .editable:focus{background:rgba(228,203,134,.24);box-shadow:0 0 0 1px var(--emas-muda);}
 
   /* --- Tombol gembok mode edit (khusus pemilik akun) --- */
   .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 4px 14px rgba(46,26,20,.3);}
@@ -221,6 +226,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Chat via WhatsApp
     </a>
+    <p class="wa-number-edit" id="waNumberEditWrap">
+      Nomor WhatsApp: <span class="editable" contenteditable="false" id="waNumberField" data-key="waNumber">6281234567890</span>
+    </p>
   </div>
 </footer>
 
@@ -530,6 +538,8 @@
   bindEditable(document.querySelector('[data-key="eyebrow"]'), 'eyebrow');
   bindEditable(document.querySelector('[data-key="heroTitle"]'), 'heroTitle');
   bindEditable(document.querySelector('[data-key="heroDesc"]'), 'heroDesc');
+  bindEditable(document.getElementById('waNumberField'), 'waNumber');
+  document.getElementById('waNumberField').addEventListener('blur', updateWaLinks);
 
   var heroArch = document.getElementById('heroArch');
   setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 'Unggah foto andalanmu di sini');
