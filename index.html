@@ -21,6 +21,7 @@
     --blush:#EFD9D3;
     --merah-limit:#B71C1C;
     --merah-bg:#FFCDD2;
+    --wa-green:#25D366;
   }
   *{box-sizing:border-box;}
   body{
@@ -28,6 +29,7 @@
     background:var(--krem);
     color:var(--cokelat);
     font-family:'Plus Jakarta Sans',sans-serif;
+    overflow-x: hidden;
   }
   h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
   a{text-decoration:none;}
@@ -118,7 +120,7 @@
   body.edit-mode .gal-remove{display:flex;}
   .gal-remove svg{width:12px;height:12px;stroke:#fff;}
 
-  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+  .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
   .pkg-card{background:var(--gading);border-radius:18px;padding:20px;border:1px solid var(--blush);display:flex;flex-direction:column;gap:16px;position:relative;}
   .pkg-remove{position:absolute;top:10px;right:10px;z-index:5;width:26px;height:26px;border-radius:50%;background:rgba(183,28,28,.8);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
   body.edit-mode .pkg-remove{display:flex;}
@@ -148,19 +150,20 @@
   .wa-number-edit .editable{color:var(--emas-muda);font-weight:600;}
 
   /* CUSTOM MODAL POPUP */
-  .custom-modal { display: none; position: fixed; inset: 0; background: rgba(46,26,20,0.7); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
+  .custom-modal { display: none; position: fixed; inset: 0; background: rgba(46,26,20,0.8); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
   .custom-modal.active { display: flex; }
-  .modal-box { background: var(--gading); padding: 24px; border-radius: 18px; width: 90%; max-width: 340px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--emas-muda); }
+  .modal-box { background: var(--gading); padding: 24px; border-radius: 18px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--emas-muda); }
   .modal-box h3 { font-size: 18px; color: var(--marun); margin-bottom: 8px; }
   .modal-box p { font-size: 13px; color: var(--cokelat-muda); margin-bottom: 20px; line-height: 1.5; }
   .modal-box input { width: 100%; padding: 12px; border: 1.5px solid var(--blush); border-radius: 10px; text-align: center; font-size: 16px; margin-bottom: 16px; font-weight: 600; outline: none; }
   .modal-box input:focus { border-color: var(--emas); }
-  .modal-actions { display: flex; gap: 10px; }
-  .btn-modal { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; }
+  .modal-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn-modal { flex: 1; min-width: 45%; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; text-align: center; font-family: inherit;}
   .btn-cancel { background: var(--blush); color: var(--marun); }
   .btn-submit { background: var(--marun); color: var(--gading); }
+  .btn-wa-modal { width: 100%; background: var(--wa-green); color: #fff; margin-top: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 
-  .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;}
+  .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999; box-shadow:0 4px 14px rgba(46,26,20,.3);}
   body.edit-mode .edit-fab{background:var(--marun);}
   
   .toast{position:fixed;bottom:78px;right:20px;background:var(--cokelat);color:var(--gading);font-size:13px;font-weight:500;padding:10px 16px;border-radius:10px;z-index:999;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;}
@@ -173,11 +176,13 @@
   @media (max-width:640px){
     .wrap{padding-left:5.5vw;padding-right:5.5vw;}
     header.hero{padding:12px 0 6px;}
-    .arch-hero{height:240px;border-radius:120px 120px 10px 10px;}
-    .arch-pkg{height:170px;border-radius:85px 85px 10px 10px;}
-    .arch-gallery{height:130px;border-radius:65px 65px 10px 10px;}
+    .hero-title{font-size: 32px;}
+    .arch-hero{height:260px;border-radius:130px 130px 10px 10px;}
+    .arch-pkg{height:180px;border-radius:90px 90px 10px 10px;}
+    .arch-gallery{height:140px;border-radius:70px 70px 10px 10px;}
     .gallery-grid{grid-template-columns:repeat(2,1fr);gap:14px;}
     .pkg-grid{grid-template-columns:1fr;gap:18px;}
+    .btn-outline{width: 100%; text-align: center; padding: 14px 20px;}
   }
 </style>
 </head>
@@ -261,10 +266,16 @@
   <div class="modal-box">
     <h3>Mode Editor Studio</h3>
     <p>Masukkan PIN Akses untuk mengubah foto dan harga paket.</p>
-    <input type="password" id="pinInput" placeholder="Ketik PIN Anda...">
+    <!-- Type text agar tulisan PIN kelihatan -->
+    <input type="text" id="pinInput" placeholder="Ketik PIN Anda..." autocomplete="off">
     <div class="modal-actions">
       <button class="btn-modal btn-cancel" onclick="closeModal('pinModal')">Batal</button>
       <button class="btn-modal btn-submit" onclick="verifyPin()">Buka Akses</button>
+      <!-- Tombol WA permintaan PIN ke Admin Pusat -->
+      <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20mau%20minta%20PIN%20akses%20editor%20katalog%20saya" target="_blank" class="btn-modal btn-wa-modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Minta PIN via WhatsApp
+      </a>
     </div>
   </div>
 </div>
@@ -272,12 +283,16 @@
 <!-- CUSTOM MODAL: KODE PRO -->
 <div id="proModal" class="custom-modal">
   <div class="modal-box">
-    <h3>Aktivasi Akun PRO</h3>
-    <p>Masukkan Kode Aktivasi untuk membuka batas maksimal galeri & paket.</p>
-    <input type="text" id="proInput" placeholder="Contoh: PRO-2026">
+    <h3>Limit Gratis Tercapai 🔒</h3>
+    <p>Tingkatkan ke versi PRO untuk membuka batas maksimal portofolio dan paket riasan.</p>
+    <input type="text" id="proInput" placeholder="Masukkan Kode PRO...">
     <div class="modal-actions">
       <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
       <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi PRO</button>
+      <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20ingin%20upgrade%20katalog%20MUA%20saya%20ke%20versi%20PRO" target="_blank" class="btn-modal btn-wa-modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Pesan Kode PRO
+      </a>
     </div>
   </div>
 </div>
@@ -371,7 +386,7 @@
   };
 
   window.verifyPin = function() {
-    var pin = document.getElementById('pinInput').value;
+    var pin = document.getElementById('pinInput').value.trim();
     if(EDIT_PINS.indexOf(pin) !== -1){
       closeModal('pinModal'); setEditMode(true);
       showToast('Mode edit aktif. Ketuk teks atau foto untuk mengubahnya.');
@@ -454,23 +469,14 @@
     data.gallery.forEach(function(g, idx){
       var wrapper = document.createElement('div');
       wrapper.style.position = 'relative';
-
       var el = makeArchElement('arch-gallery', 'Unggah karya');
       
-      // LOGIKA LIMIT GALLERY FREE (Max 4)
-      if (!isPremium() && idx >= 4) {
-          el.classList.add('locked-item');
-          var msg = document.createElement('div'); msg.className = 'lock-msg-arch';
-          msg.innerHTML = '🔒 Disembunyikan (Limit Free)';
-          el.appendChild(msg);
-      }
-
       // Tombol hapus galeri
       var removeBtn = document.createElement('button');
       removeBtn.className = 'gal-remove';
       removeBtn.innerHTML = iconTrash;
       removeBtn.addEventListener('click', function(e){
-        e.stopPropagation(); // supaya tidak kepencet upload
+        e.stopPropagation(); 
         if(!editMode) return;
         data.gallery = data.gallery.filter(function(x){ return x.id !== g.id; });
         save(); renderGallery();
@@ -483,14 +489,21 @@
       setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 'Unggah karya');
     });
 
-    // TOMBOL TAMBAH FOTO (MAKS 100)
+    // TOMBOL TAMBAH FOTO (MEMUNCULKAN POPUP JIKA LIMIT TERCAPAI)
     if(data.gallery.length < 100) {
       var addBtn = document.createElement('button');
       addBtn.className = 'add-pkg-btn';
-      addBtn.style.minHeight = '180px';
-      addBtn.innerHTML = iconPlus + ' Tambah Foto Portofolio';
+      addBtn.style.minHeight = '140px'; // Lebih proporsional di HP
+      addBtn.innerHTML = iconPlus + ' Tambah Portofolio';
       addBtn.addEventListener('click', function(){
         if(!editMode) return;
+        
+        // Cek Limit
+        if (!isPremium() && data.gallery.length >= 4) {
+            openProModal();
+            return;
+        }
+
         data.gallery.push({ id: nextId(), image: null });
         save(); renderGallery();
       });
@@ -502,13 +515,6 @@
     var grid = document.getElementById('pkgGrid'); grid.innerHTML = '';
     data.packages.forEach(function(pkg, pkgIdx){
       var card = document.createElement('div'); card.className = 'pkg-card';
-
-      if (!isPremium() && pkgIdx >= 2) {
-          card.classList.add('locked-item');
-          var lockMsg = document.createElement('div'); lockMsg.className = 'lock-msg';
-          lockMsg.innerHTML = '🔒 Paket Disembunyikan di Publik (Limit Free)';
-          card.appendChild(lockMsg);
-      }
 
       var removeBtn = document.createElement('button');
       removeBtn.className = 'pkg-remove'; removeBtn.title = 'Hapus paket';
@@ -544,9 +550,6 @@
         itemList.innerHTML = '';
         pkg.items.forEach(function(it, itIdx){
           var row = document.createElement('div'); row.className = 'item-row';
-          if (!isPremium() && itIdx >= 3) {
-              row.classList.add('locked-item'); row.title = "Item disembunyikan di publik (Limit Free)";
-          }
           var bullet = document.createElement('span'); bullet.className = 'bullet'; bullet.textContent = '✦';
           row.appendChild(bullet);
           var textEl = document.createElement('span'); textEl.className = 'item-text editable';
@@ -568,7 +571,15 @@
       var addItemBtn = document.createElement('button'); addItemBtn.className = 'add-item-btn';
       addItemBtn.innerHTML = iconPlus + ' Tambah yang didapat';
       addItemBtn.addEventListener('click', function(){
-        if(!editMode) return; pkg.items.push({ id: nextId(), text: 'Keterangan Item...' });
+        if(!editMode) return;
+        
+        // Cek Limit Item
+        if (!isPremium() && pkg.items.length >= 3) {
+            openProModal();
+            return;
+        }
+
+        pkg.items.push({ id: nextId(), text: 'Keterangan Item...' });
         save(); renderItems();
       });
       itemsHead.appendChild(addItemBtn); card.appendChild(itemsHead); grid.appendChild(card);
@@ -578,6 +589,13 @@
     addCard.innerHTML = iconPlus + ' Tambah Paket';
     addCard.addEventListener('click', function(){
       if(!editMode) return;
+      
+      // Cek Limit Paket
+      if (!isPremium() && data.packages.length >= 2) {
+          openProModal();
+          return;
+      }
+
       data.packages.push({
         id: nextId(), image: null, title: 'Paket Baru', price: 'Rp 0', items: [{ id: nextId(), text: 'Keterangan Item...' }]
       }); save(); renderPackages();
