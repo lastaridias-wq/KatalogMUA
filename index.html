@@ -3,615 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenMUA | Studio Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Pricelist & Katalog MUA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #FBF9F7; --card-bg: #FFFFFF; --text-main: #3D3532; 
-            --text-muted: #8C827D; --accent: #C5A880; --border: #EAE3DD;
-            --success: #2E7D32; --warning: #ED6C02; --danger: #D32F2F;
+            /* TEMA WARNA SENADA DENGAN DASHBOARD MUA */
+            --bg-main: #FFF5F0; 
+            --card-bg: #FFFFFF; 
+            --text-main: #2A1E1A; 
+            --text-muted: #7A6862; 
+            --accent: #C5A47E; 
+            --border: #DBC5BC;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
         
+        /* WADAH MOBILE FRIENDLY */
         .app-container {
-            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(61, 53, 50, 0.06); border: 1px solid var(--border);
-            overflow: hidden; display: flex; flex-direction: column; position: relative; min-height: 720px;
+            width: 100%; max-width: 420px; background: var(--card-bg); 
+            box-shadow: 0 10px 30px rgba(42, 30, 26, 0.08); 
+            display: flex; flex-direction: column; position: relative; min-height: 100vh;
         }
 
-        /* HEADER */
-        .app-header { padding: 20px; background: #FFFFFF; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .studio-info h2 { font-size: 16px; font-weight: 700; color: var(--text-main); }
-        .studio-info p { font-size: 12px; color: var(--text-muted); }
-        .owner-badge { background: #F4EFEA; color: var(--accent); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; }
+        /* HEADER KATALOG */
+        .header { 
+            padding: 30px 20px 20px; text-align: center; background: linear-gradient(135deg, #FFFBF9 0%, #FFF5F0 100%);
+            border-bottom: 2px solid var(--border);
+        }
+        .studio-logo { 
+            width: 70px; height: 70px; background: var(--accent); color: white; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 28px; font-weight: 800; margin: 0 auto 12px;
+            box-shadow: 0 4px 15px rgba(197, 164, 126, 0.4);
+        }
+        .header h1 { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+        .header p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-        /* KONTEN HALAMAN */
-        .page-content { display: none; flex-grow: 1; padding: 20px; overflow-y: auto; padding-bottom: 90px; }
-        .page-content.active { display: block; }
-
-        /* KARTU OMZET & STATS */
-        .omzet-card { margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #3D3532 0%, #5C4F4A 100%); color: #FFFFFF; border-radius: 18px; box-shadow: 0 6px 16px rgba(61,53,50,0.15); }
-        .omzet-card p { font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
-        .omzet-card h1 { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
-        .stat-item h3 { font-size: 14px; font-weight: 700; }
-        .stat-item span { font-size: 10px; color: rgba(255,255,255,0.7); }
-
-        .section-title { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* MENU CEPAT */
-        .quick-access { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-        .menu-btn { background: #FBF9F7; border: 1px solid var(--border); border-radius: 14px; padding: 12px 6px; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .menu-btn:hover { background: #F4EFEA; border-color: var(--accent); }
-        .menu-icon { font-size: 18px; margin-bottom: 4px; }
-        .menu-btn span { font-size: 10px; font-weight: 600; color: var(--text-main); display: block; }
-
-        /* BOX LIST DATA */
-        .booking-box { background: #FBF9F7; border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .client-name { font-size: 13px; font-weight: 700; color: var(--text-main); }
-        .client-service { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
-        .right-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        /* KATEGORI FILTER */
+        .category-wrapper {
+            display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px;
+            border-bottom: 1px solid var(--border); background: var(--card-bg);
+            scrollbar-width: none; /* Firefox */
+        }
+        .category-wrapper::-webkit-scrollbar { display: none; /* Chrome */ }
         
-        .status-badge { font-size: 10px; font-weight: 700; padding: 6px 10px; border-radius: 8px; text-align: center; cursor: pointer; width: 100%; border: none; }
-        .status-badge.progress { background: #FFF3E0; color: var(--warning); }
-        .status-badge.done { background: #E8F5E9; color: var(--success); }
-        .status-badge.expense { background: #FFEBEE; color: var(--danger); }
-        .status-badge.invoice { background: #E3F2FD; color: #1976D2; }
-        .status-badge.reminder { background: #FBE9E7; color: #D84315; }
+        .cat-btn {
+            padding: 8px 16px; background: #FFFBF9; border: 1px solid var(--border);
+            border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text-muted);
+            cursor: pointer; white-space: nowrap; transition: 0.3s;
+        }
+        .cat-btn.active { background: var(--text-main); color: #FFF; border-color: var(--text-main); }
+
+        /* LIST PAKET */
+        .catalog-content { padding: 20px; flex-grow: 1; padding-bottom: 100px; background: #FFFBF9; }
         
-        .btn-delete-item { background: none; border: none; color: var(--danger); font-size: 11px; cursor: pointer; font-weight: 600; text-decoration: underline; margin-top: 4px; }
-        .action-card-btn { width: 100%; padding: 14px; background: var(--accent); color: #FFFFFF; border: none; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; margin-bottom: 16px; }
-
-        /* BOTTOM NAV */
-        .bottom-nav { display: flex; justify-content: space-around; background: #FFFFFF; border-top: 1px solid var(--border); padding: 12px 0; position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; }
-        .nav-item { text-align: center; color: var(--text-muted); font-size: 10px; font-weight: 650; cursor: pointer; background: none; border: none; flex: 1; }
-        .nav-item.active { color: var(--accent); }
-        .nav-item div { font-size: 16px; margin-bottom: 2px; }
-
-        /* SETTINGS CARD */
-        .settings-card { background: #FBF9F7; border: 1px solid var(--border); border-radius: 18px; padding: 20px; margin-bottom: 16px; }
-        .settings-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-
-        /* MODAL */
-        .modal-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(61, 53, 50, 0.5); backdrop-filter: blur(4px); z-index: 100; justify-content: center; align-items: flex-end; }
-        .modal-overlay.active { display: flex; }
-        .modal-sheet { background: #FFFFFF; width: 100%; max-height: 85vh; border-radius: 24px 24px 0 0; padding: 24px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; overflow-y: auto; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-header h3 { font-size: 16px; font-weight: 700; }
-        .close-modal { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted); }
+        .package-card {
+            background: var(--card-bg); border: 2px solid var(--border);
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: 0.3s;
+        }
+        .package-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+        .package-price { font-size: 18px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
         
-        .form-group { margin-bottom: 14px; text-align: left; }
-        .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 13px; background: #FBF9F7; color: var(--text-main); outline: none; }
-        .form-group textarea { resize: none; height: 60px; }
-        .submit-btn { width: 100%; padding: 14px; background: var(--text-main); color: #FFFFFF; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .package-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
+        .package-includes { margin-bottom: 15px; }
+        .package-includes li { 
+            font-size: 11px; color: var(--text-main); margin-bottom: 6px; 
+            list-style: none; display: flex; align-items: flex-start; gap: 6px;
+        }
+        .package-includes li::before { content: '✨'; font-size: 10px; margin-top: 1px; }
 
-        #toast { visibility: hidden; min-width: 240px; background-color: #3D3532; color: #fff; text-align: center; border-radius: 12px; padding: 12px 16px; position: fixed; z-index: 1000; left: 50%; bottom: 70px; transform: translateX(-50%); font-size: 12px; font-weight: 600; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
-        #toast.show { visibility: visible; opacity: 1; bottom: 90px; }
-        .invoice-preview-box { background: #FBF9F7; border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 12px; text-align: left; white-space: pre-line; margin-bottom: 16px; color: #5C4F4A; line-height: 1.5; }
+        .btn-book {
+            width: 100%; padding: 12px; background: linear-gradient(90deg, #C5A47E 0%, #E3CDA9 100%);
+            color: #2A1E1A; border: none; border-radius: 12px; font-size: 13px; font-weight: 800;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: opacity 0.2s;
+        }
+        .btn-book:active { opacity: 0.8; }
+
+        /* FLOATING FOOTER CONTACT */
+        .floating-footer {
+            position: fixed; bottom: 0; width: 100%; max-width: 420px;
+            background: var(--card-bg); padding: 15px 20px;
+            border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-text h4 { font-size: 12px; font-weight: 700; color: var(--text-main); }
+        .footer-text p { font-size: 10px; color: var(--text-muted); }
+        .btn-consult {
+            padding: 10px 20px; background: var(--text-main); color: #fff;
+            border-radius: 12px; font-size: 12px; font-weight: 700; text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <!-- HEADER DINAMIS -->
-        <div class="app-header">
-            <div class="studio-info">
-                <h2 id="headerStudioName">Studio MUA</h2>
-                <p id="headerOwnerName">Owner</p>
-            </div>
-            <div class="owner-badge" id="headerOwnerBadge">FREE TRIAL</div>
+        
+        <!-- HEADER STUDIO -->
+        <div class="header">
+            <div class="studio-logo" id="logoText">NM</div>
+            <h1 id="namaStudio">Nela Mua Studio</h1>
+            <p>Make your special day more beautiful.<br>Pricelist & Layanan Rias Profesional.</p>
         </div>
 
-        <!-- HALAMAN 1: BERANDA -->
-        <div id="pageBeranda" class="page-content active">
-            <div class="omzet-card">
-                <p>Total Pendapatan Bersih</p>
-                <h1 id="totalOmzetDisplay">Rp 0</h1>
-                <div class="stats-grid">
-                    <div class="stat-item"><h3 id="countKlien">0</h3><span>Total Klien</span></div>
-                    <div class="stat-item"><h3 id="countBooking">0</h3><span>Booking Aktif</span></div>
-                    <div class="stat-item"><h3 id="countBelumLunas" style="color: #FFB74D;">0</h3><span>Belum Lunas</span></div>
-                </div>
-            </div>
-
-            <div class="section-title">Akses Cepat</div>
-            <div class="quick-access">
-                <div class="menu-btn" onclick="switchPage('klien')"><div class="menu-icon">👥</div><span>Klien</span></div>
-                <div class="menu-btn" onclick="openBookingModal()"><div class="menu-icon">📅</div><span>Booking</span></div>
-                <div class="menu-btn" onclick="switchPage('keuangan')"><div class="menu-icon">💰</div><span>Keuangan</span></div>
-                <div class="menu-btn" onclick="switchPage('invoice')"><div class="menu-icon">📄</div><span>Invoice</span></div>
-            </div>
-
-            <div class="section-title">Booking Terdekat</div>
-            <div id="bookingListContainer">
-                <p style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 20px;">Menyinkronkan data studio...</p>
-            </div>
+        <!-- MENU KATEGORI -->
+        <div class="category-wrapper" id="categoryContainer">
+            <!-- Kategori di-generate via JavaScript -->
         </div>
 
-        <!-- HALAMAN 2: KLIEN -->
-        <div id="pageKlien" class="page-content">
-            <div class="section-title">Semua Data Klien Studio</div>
-            <div id="clientListContainer"></div>
+        <!-- DAFTAR PAKET -->
+        <div class="catalog-content" id="packageContainer">
+            <!-- Paket di-generate via JavaScript -->
         </div>
 
-        <!-- HALAMAN 3: KEUANGAN -->
-        <div id="pageKeuangan" class="page-content">
-            <div class="omzet-card" style="background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);">
-                <p>Arus Kas Masuk - Keluar</p>
-                <h1 id="netProfitDisplay">Rp 0</h1>
-                <div class="stats-grid">
-                    <div class="stat-item"><h3 id="totalMasukDisplay">Rp 0</h3><span>Uang Masuk</span></div>
-                    <div class="stat-item"><h3 id="totalKeluarDisplay">Rp 0</h3><span>Uang Keluar</span></div>
-                    <div class="stat-item"><h3>Bulan Ini</h3><span>Periode</span></div>
-                </div>
+        <!-- FOOTER KONSULTASI -->
+        <div class="floating-footer">
+            <div class="footer-text">
+                <h4>Butuh Custom Paket?</h4>
+                <p>Konsultasikan riasan impianmu.</p>
             </div>
-            <button class="action-card-btn" onclick="openExpenseModal()">➕ Catat Pengeluaran Baru</button>
-            <div class="section-title">Riwayat Pengeluaran</div>
-            <div id="financeListContainer"></div>
+            <a href="#" class="btn-consult" id="btnConsultWA">Chat Admin</a>
         </div>
-
-        <!-- HALAMAN 4: INVOICE -->
-        <div id="pageInvoice" class="page-content">
-            <div class="section-title">Daftar Tagihan & Invoice Studio</div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Pilih jenis pesan otomatis yang ingin Anda kirimkan ke WhatsApp Klien.</p>
-            <div id="invoiceListContainer"></div>
-        </div>
-
-        <!-- HALAMAN 5: AKUN -->
-        <div id="pageAkun" class="page-content">
-            <div class="section-title">Pengaturan Profil Studio</div>
-            <div class="settings-card">
-                <h4>Informasi Identitas Studio</h4>
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Data aplikasi akan otomatis difilter berdasarkan Nama Studio ini.</p>
-                <form id="settingsForm" onsubmit="handleSettingsSubmit(event)">
-                    <div class="form-group">
-                        <label>Nama Studio / Brand (Penting)</label>
-                        <input type="text" id="settingStudioName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Nama Pemilik (Owner)</label>
-                        <input type="text" id="settingOwnerName" required>
-                    </div>
-                    <button type="submit" class="submit-btn" style="margin-top: 5px;">Simpan Profil Studio</button>
-                </form>
-            </div>
-            <div class="settings-card" id="subscriptionCard">
-                <h4>Status Langganan Sistem</h4>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Status Akun: <b id="accountStatusText">FREE TRIAL (Limit 5 Project)</b></p>
-                <button class="action-card-btn" style="background: #3D3532; margin-bottom: 0;" id="btnUpgradePro" onclick="openUpgradeModal()">🚀 Upgrade ke Versi PRO</button>
-            </div>
-        </div>
-
-        <!-- BOTTOM NAV -->
-        <div class="bottom-nav">
-            <button class="nav-item active" id="navBeranda" onclick="switchPage('beranda')"><div>🏠</div>Beranda</button>
-            <button class="nav-item" id="navKlien" onclick="switchPage('klien')"><div>👥</div>Klien</button>
-            <button class="nav-item" id="navKeuangan" onclick="switchPage('keuangan')"><div>💰</div>Keuangan</button>
-            <button class="nav-item" id="navInvoice" onclick="switchPage('invoice')"><div>📄</div>Invoice</button>
-            <button class="nav-item" id="navAkun" onclick="switchPage('akun')"><div>⚙️</div>Akun</button>
-        </div>
-
-        <!-- SEMUA MODAL FORM -->
-        <div class="modal-overlay" id="bookingModal">
-            <div class="modal-sheet">
-                <div class="modal-header">
-                    <h3>Tambah Booking Klien Baru</h3>
-                    <button class="close-modal" onclick="closeModal('bookingModal')">✕</button>
-                </div>
-                <form id="bookingForm" onsubmit="handleFormSubmit(event)">
-                    <div class="form-group"><label>Nama Klien</label><input type="text" id="clientNameInput" required></div>
-                    <div class="form-group">
-                        <label>Layanan</label>
-                        <select id="serviceInput">
-                            <option value="Paket Akad">Paket Akad</option>
-                            <option value="Paket Resepsi">Paket Resepsi</option>
-                            <option value="Event/Wisuda">Event/Wisuda</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Tanggal Acara</label><input type="date" id="dateInput" required></div>
-                    <div class="form-group">
-                        <label>Status Pembayaran</label>
-                        <select id="paymentStatusInput"><option value="DP">DP</option><option value="Lunas">Lunas</option></select>
-                    </div>
-                    <div class="form-group"><label>Nominal (Rp)</label><input type="text" id="dpInput" oninput="formatRupiah(this)" required></div>
-                    <div class="form-group"><label>Catatan Khusus Riasan</label><textarea id="noteInput" placeholder="Cth: Request adat, tipe kulit..."></textarea></div>
-                    <button type="submit" class="submit-btn">Simpan Booking</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="expenseModal">
-            <div class="modal-sheet">
-                <div class="modal-header">
-                    <h3>Catat Pengeluaran Studio</h3>
-                    <button class="close-modal" onclick="closeModal('expenseModal')">✕</button>
-                </div>
-                <form id="expenseForm" onsubmit="handleExpenseSubmit(event)">
-                    <div class="form-group"><label>Keterangan</label><input type="text" id="expDescInput" required></div>
-                    <div class="form-group"><label>Nominal Keluar (Rp)</label><input type="text" id="expNominalInput" oninput="formatRupiah(this)" required></div>
-                    <button type="submit" class="submit-btn">Simpan Pengeluaran</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="invoicePreviewModal">
-            <div class="modal-sheet">
-                <div class="modal-header">
-                    <h3>Pratinjau Pesan Klien</h3>
-                    <button class="close-modal" onclick="closeModal('invoicePreviewModal')">✕</button>
-                </div>
-                <div class="invoice-preview-box" id="invoicePreviewText"></div>
-                <button class="submit-btn" style="background: #25D366;" id="whatsappSendBtn">📲 Kirim ke WhatsApp Klien</button>
-            </div>
-        </div>
-
-        <div class="modal-overlay" id="deleteConfirmModal">
-            <div class="modal-sheet" style="text-align: center; padding-top: 30px;">
-                <div style="font-size: 36px; margin-bottom: 10px;">🗑️</div>
-                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Hapus Data Ini?</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Angka statistik di dasbor Anda akan otomatis diperbarui kembali.</p>
-                <div style="display: flex; gap: 10px;">
-                    <button class="submit-btn" style="background: #EAE3DD; color: var(--text-main); flex: 1;" onclick="closeModal('deleteConfirmModal')">Batal</button>
-                    <button class="submit-btn" style="background: var(--danger); flex: 1;" id="confirmDeleteBtn">Ya, Hapus</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Limit Modal -->
-        <div class="modal-overlay" id="limitModal">
-            <div class="modal-sheet" style="text-align: center; padding-top: 30px;">
-                <div style="font-size: 36px; margin-bottom: 10px;">🔒</div>
-                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Batas Trial Gratis Habis!</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Anda telah mencapai limit 5 project. Silakan upgrade ke versi GenMUA PRO.</p>
-                <button class="submit-btn" style="background: var(--accent);" onclick="openUpgradeModal()">Lihat Penawaran PRO</button>
-                <button class="submit-btn" style="background: #EAE3DD; color: var(--text-main);" onclick="closeModal('limitModal')">Tutup</button>
-            </div>
-        </div>
-
-        <!-- Upgrade PRO Modal (Jalur Self-Service Rp 49.000 / 3 Bulan) -->
-        <div class="modal-overlay" id="upgradeModal">
-            <div class="modal-sheet" style="padding-top: 20px;">
-                <div class="modal-header" style="margin-bottom: 15px;">
-                    <h3 style="font-size: 16px; font-weight: 700;">Aktivasi Akun PRO</h3>
-                    <button class="close-modal" onclick="closeModal('upgradeModal')">✕</button>
-                </div>
-                
-                <div style="background: #F4EFEA; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Keuntungan GenMUA PRO:</h4>
-                    <ul style="font-size: 11px; color: var(--text-muted); margin-left: 16px; line-height: 1.6;">
-                        <li>Input project riasan <b>Tanpa Batas (Unlimited)</b></li>
-                        <li>Sinkronisasi aman ke Google Sheets Anda</li>
-                        <li>Akses fitur copywriting tagihan elegan</li>
-                    </ul>
-                    <div style="margin-top: 10px; font-size: 14px; font-weight: 800; color: var(--accent);">
-                        Hanya Rp 49.000 / 3 Bulan
-                    </div>
-                </div>
-
-                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Sudah transfer? Masukkan <b>Kode Aktivasi</b> dari Admin di sini:</p>
-                
-                <div class="form-group">
-                    <input type="text" id="proCodeInput" placeholder="Ketik Kode Aktivasi..." style="text-align: center; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">
-                </div>
-
-                <button class="submit-btn" style="background: var(--text-main); margin-bottom: 8px;" onclick="verifyProCode()">🔑 Verifikasi Kode</button>
-                <button class="submit-btn" style="background: #25D366; color: white;" onclick="buyProCode()">📲 Pesan Kode via WhatsApp</button>
-            </div>
-        </div>
-
     </div>
-    <div id="toast">✅ Berhasil!</div>
 
     <script>
-        // --- 1. FITUR MAGIC LINK (JALUR JASA SETUP INSTAN RP 35.000) ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const paramStudio = urlParams.get('studio');
-        const paramOwner = urlParams.get('owner');
-        const paramCode = urlParams.get('code');
-
-        if (paramStudio) { localStorage.setItem('genmua_studioName', paramStudio); }
-        if (paramOwner) { localStorage.setItem('genmua_ownerName', paramOwner); }
-        if (paramCode && paramCode.toUpperCase() === "GENMUA2026") {
-            localStorage.setItem('genmua_isPro', 'true');
-        }
-
-        // --- 2. AMBIL MEMORI APLIKASI ---
-        let appState = {
-            studioName: localStorage.getItem('genmua_studioName') || 'Nela Mua Studio',
-            ownerName: localStorage.getItem('genmua_ownerName') || 'Nela',
-            isPro: localStorage.getItem('genmua_isPro') === 'true',
-            projectCount: 0, 
-            uangMasuk: 0, 
-            uangKeluar: 0, 
-            belumLunasCount: 0
-        };
-        let activeDelete = { id: null, type: null, amount: 0, status: '' };
-
-        // URL GOOGLE APPS SCRIPT
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyEMTMyqg9tKz54icmTijvjVXbYBwzR5lDGPnaIhwkw2ehUYwmZ_1iU08ouYWNxu5arjQ/exec';
-
-        // SET IDENTITAS DI MUKA
-        document.getElementById('headerStudioName').innerText = appState.studioName;
-        document.getElementById('headerOwnerName').innerText = "Owner: " + appState.ownerName;
-        document.getElementById('settingStudioName').value = appState.studioName;
-        document.getElementById('settingOwnerName').value = appState.ownerName;
-        if(appState.isPro) activateProUI();
-
-        window.addEventListener('DOMContentLoaded', loadDataFromSheets);
-
-        document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-            if (activeDelete.id) {
-                if (activeDelete.type === 'booking') {
-                    const b = document.getElementById('b-' + activeDelete.id); const c = document.getElementById('c-' + activeDelete.id); const i = document.getElementById('i-' + activeDelete.id);
-                    if(b) b.remove(); if(c) c.remove(); if(i) i.remove();
-
-                    appState.projectCount = Math.max(0, appState.projectCount - 1);
-                    appState.uangMasuk = Math.max(0, appState.uangMasuk - activeDelete.amount);
-                    if (activeDelete.status === 'DP') appState.belumLunasCount = Math.max(0, appState.belumLunasCount - 1);
-                } 
-                else if (activeDelete.type === 'expense') {
-                    const e = document.getElementById('exp-' + activeDelete.id);
-                    if(e) e.remove(); appState.uangKeluar = Math.max(0, appState.uangKeluar - activeDelete.amount);
-                }
-                updateDashboardStats(); closeModal('deleteConfirmModal');
-                showToast("🗑️ Data dihapus dari tampilan layar.");
-            }
-        });
-
-        function triggerDelete(uniqueId, type, amount, status = '') {
-            activeDelete = { id: uniqueId, type: type, amount: amount, status: status };
-            document.getElementById('deleteConfirmModal').classList.add('active');
-        }
-
-        async function loadDataFromSheets() {
-            try {
-                const response = await fetch(scriptURL);
-                const allData = await response.json();
-                
-                document.getElementById('bookingListContainer').innerHTML = '';
-                document.getElementById('clientListContainer').innerHTML = '';
-                document.getElementById('invoiceListContainer').innerHTML = '';
-                
-                appState.projectCount = 0; appState.uangMasuk = 0; appState.belumLunasCount = 0;
-                const myData = allData.filter(item => item.studio === appState.studioName);
-
-                if (myData.length === 0) {
-                    const emptyText = '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px;">Belum ada agenda riasan saat ini. Yuk, tambah booking baru!</p>';
-                    document.getElementById('bookingListContainer').innerHTML = emptyText;
-                } else {
-                    myData.forEach((item, index) => {
-                        const uId = item.id || ('gs-' + index);
-                        let rawMoney = parseInt(item.dp) || 0;
-                        appState.projectCount++; appState.uangMasuk += rawMoney;
-                        if(item.status === 'DP') appState.belumLunasCount++;
-                        
-                        renderBookingToUI(uId, item.nama, item.layanan, item.tanggal, rawMoney, item.catatan, item.status);
-                    });
-                }
-                updateDashboardStats();
-            } catch (error) {
-                document.getElementById('bookingListContainer').innerHTML = '<p style="font-size:12px;color:var(--text-muted);text-align:center;padding:20px;">Belum ada agenda riasan saat ini. Yuk, tambah booking baru!</p>';
-            }
-        }
-
-        // --- RENDER UI ---
-        function renderBookingToUI(id, name, service, date, money, note, statusPay) {
-            const label = statusPay === 'Lunas' ? 'Lunas' : 'Pending';
-            const bClass = statusPay === 'Lunas' ? 'done' : 'progress';
-            const strMoney = money.toLocaleString('id-ID');
-
-            document.getElementById('bookingListContainer').insertAdjacentHTML('afterbegin', `
-                <div class="booking-box" id="b-${id}">
-                    <div><div class="client-name">${name}</div><div class="client-service">${service} • ${date}<br><small>${note}</small></div></div>
-                    <div class="right-actions"><div class="status-badge ${bClass}">${label}</div><button class="btn-delete-item" onclick="triggerDelete('${id}', 'booking', ${money}, '${statusPay}')">Hapus</button></div>
-                </div>
-            `);
-            document.getElementById('clientListContainer').insertAdjacentHTML('afterbegin', `
-                <div class="booking-box" id="c-${id}">
-                    <div><div class="client-name">${name}</div><div class="client-service">${service} • ${date}<br>Masuk: Rp ${strMoney}</div></div>
-                    <div class="right-actions"><div class="status-badge ${bClass}">${statusPay === 'Lunas' ? 'Lunas' : 'DP Terbayar'}</div><button class="btn-delete-item" onclick="triggerDelete('${id}', 'booking', ${money}, '${statusPay}')">Hapus</button></div>
-                </div>
-            `);
-            
-            // MENU INVOICE
-            let invoiceButtons = "";
-            if (statusPay === 'Lunas') {
-                invoiceButtons = `<div class="status-badge done" onclick="openInvoicePreview('${name}', '${service}', '${strMoney}', 'lunas', '${date}')">📝 Struk Lunas</div>`;
-            } else {
-                invoiceButtons = `
-                    <div class="status-badge reminder" onclick="openInvoicePreview('${name}', '${service}', '${strMoney}', 'tagihan', '${date}')">🔔 Tagih Sisa</div>
-                    <div class="status-badge invoice" onclick="openInvoicePreview('${name}', '${service}', '${strMoney}', 'dp', '${date}')">📝 Struk DP</div>
-                `;
-            }
-
-            document.getElementById('invoiceListContainer').insertAdjacentHTML('afterbegin', `
-                <div class="booking-box" id="i-${id}">
-                    <div><div class="client-name">${name}</div><div class="client-service">${service}<br>Dana Masuk: Rp ${strMoney}</div></div>
-                    <div class="right-actions">
-                        ${invoiceButtons}
-                        <button class="btn-delete-item" onclick="triggerDelete('${id}', 'booking', ${money}, '${statusPay}')">Hapus Data</button>
-                    </div>
-                </div>
-            `);
-        }
-
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('clientNameInput').value;
-            const service = document.getElementById('serviceInput').value;
-            const date = document.getElementById('dateInput').value;
-            const statusPay = document.getElementById('paymentStatusInput').value;
-            const dp = document.getElementById('dpInput').value;
-            const note = document.getElementById('noteInput').value || 'Tidak ada catatan';
-            
-            const rawMoney = parseInt(dp.replace(/\./g, '')) || 0;
-            const uniqueId = 'local-' + Date.now();
-
-            closeModal('bookingModal'); document.getElementById('bookingForm').reset();
-            if(appState.projectCount === 0) document.getElementById('bookingListContainer').innerHTML = '';
-
-            let deviceCreatedCount = parseInt(localStorage.getItem('genmua_deviceCreatedCount') || '0');
-            deviceCreatedCount++;
-            localStorage.setItem('genmua_deviceCreatedCount', deviceCreatedCount.toString());
-
-            appState.projectCount++; 
-            appState.uangMasuk += rawMoney;
-            if(statusPay === 'DP') appState.belumLunasCount++;
-            
-            renderBookingToUI(uniqueId, name, service, date, rawMoney, note, statusPay);
-            updateDashboardStats(); showToast("✨ Data tersimpan di dasbor.");
-
-            fetch(scriptURL, {
-                method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nama: name, layanan: service, tanggal: date, dp: rawMoney, catatan: note, status: statusPay, studio: appState.studioName })
-            });
-        }
-
-        function handleExpenseSubmit(event) {
-            event.preventDefault();
-            const desc = document.getElementById('expDescInput').value;
-            const nominal = document.getElementById('expNominalInput').value;
-            const rawNominal = parseInt(nominal.replace(/\./g, '')) || 0;
-            const uniqueId = Date.now();
-
-            closeModal('expenseModal'); document.getElementById('expenseForm').reset();
-            appState.uangKeluar += rawNominal;
-
-            document.getElementById('financeListContainer').insertAdjacentHTML('afterbegin', `
-                <div class="booking-box" id="exp-${uniqueId}">
-                    <div><div class="client-name">${desc}</div><div class="client-service">Pengeluaran</div></div>
-                    <div class="right-actions"><div class="status-badge expense">- Rp ${nominal}</div><button class="btn-delete-item" onclick="triggerDelete('${uniqueId}', 'expense', ${rawNominal}, '')">Hapus</button></div>
-                </div>
-            `);
-            updateDashboardStats(); showToast("💸 Pengeluaran dicatat!");
-        }
-
-        function handleSettingsSubmit(event) {
-            event.preventDefault();
-            const newStudio = document.getElementById('settingStudioName').value.trim();
-            const newOwner = document.getElementById('settingOwnerName').value.trim();
-            
-            appState.studioName = newStudio;
-            appState.ownerName = newOwner;
-            
-            localStorage.setItem('genmua_studioName', newStudio);
-            localStorage.setItem('genmua_ownerName', newOwner);
-            
-            document.getElementById('headerStudioName').innerText = newStudio;
-            document.getElementById('headerOwnerName').innerText = "Owner: " + newOwner;
-            
-            showToast("✨ Profil studio berhasil diperbarui!");
-            loadDataFromSheets();
-        }
-
-        // --- COPYWRITING INVOICE ELEGAN ---
-        function openInvoicePreview(name, service, money, type, date) {
-            let templateText = "";
-            const studio = appState.studioName.toUpperCase();
-
-            if (type === 'dp') {
-                templateText = `Halo Kak *${name}*, ✨\n\nTerima kasih banyak sudah mempercayakan momen spesial Kakak bersama *${studio}*.\n\nBerikut kami lampirkan rincian tanda jadi (DP) untuk mengamankan jadwal Kakak:\n\n💄 *Layanan:* ${service}\n📅 *Tgl Acara:* ${date}\n💳 *Dana Masuk (DP):* Rp ${money}\n📊 *Status:* Booking Terkonfirmasi (Pending Pelunasan)\n\nJadwal Kakak sudah aman dan tercatat di sistem kami. Jika ada referensi makeup yang diinginkan, boleh banget dikirimkan ke kami ya, Kak. Sehat selalu sampai hari H! 🙏`;
-            } 
-            else if (type === 'lunas') {
-                templateText = `Halo Kak *${name}*, ✨\n\nTerima kasih banyak sudah mempercayakan momen spesial Kakak bersama *${studio}*.\n\nBerikut adalah rincian pembayaran Anda:\n\n💄 *Layanan:* ${service}\n📅 *Tgl Acara:* ${date}\n💳 *Total Transaksi:* Rp ${money}\n📊 *Status:* LUNAS ✅\n\nKami sangat antusias untuk merias Kakak. Sampai jumpa di hari H! 🙏`;
-            } 
-            else if (type === 'tagihan') {
-                templateText = `Halo Kak *${name}*, ✨\nSemoga Kakak selalu dalam keadaan sehat dan bahagia ya!\n\nTidak terasa hari spesial Kakak sudah semakin dekat. Kami sangat excited untuk merias Kakak nanti! 🥰\n\nBersamaan dengan pesan ini, kami izin melampirkan pengingat rincian layanan booking di *${studio}*:\n\n💄 *Layanan:* ${service}\n📅 *Tgl Acara:* ${date}\n💳 *Uang Masuk (DP):* Rp ${money}\n\nUntuk kelancaran persiapan di hari H, mohon kesediaannya untuk menyelesaikan sisa pelunasan sesuai kesepakatan kita ya, Kak. Jika sudah berkenan melakukan transfer, mohon informasikan kembali ke kami beserta bukti resinya.\n\nTerima kasih banyak atas pengertian dan kerja samanya, Kak! 🙏`;
-            }
-
-            document.getElementById('invoicePreviewText').innerText = templateText;
-            document.getElementById('whatsappSendBtn').onclick = function() { 
-                window.open(`https://wa.me/?text=${encodeURIComponent(templateText)}`, '_blank'); 
-                closeModal('invoicePreviewModal'); 
-            };
-            document.getElementById('invoicePreviewModal').classList.add('active');
-        }
-
-        // --- LOGIKA AKTIVASI PRO ---
-        function openUpgradeModal() { closeModal('limitModal'); document.getElementById('upgradeModal').classList.add('active'); }
-
-        function verifyProCode() {
-            const inputCode = document.getElementById('proCodeInput').value.trim().toUpperCase();
-            if (inputCode === "GENMUA2026") {
-                localStorage.setItem('genmua_isPro', 'true'); 
-                activateProUI(); 
-                closeModal('upgradeModal');
-                showToast("🚀 Berhasil! Akun Anda kini berstatus PRO.");
-            } else {
-                alert("❌ Kode Aktivasi salah atau tidak valid! Silakan hubungi admin.");
-            }
-        }
-
-        function buyProCode() {
-            // GANTI NOMOR INI DENGAN NOMOR WA ANDA SENDIRI
-            const waNumber = "6281234567890";
-            const textMsg = encodeURIComponent(`Halo Admin GenMUA,\n\nSaya tertarik untuk aktivasi akun PRO seharga *Rp 49.000 / 3 Bulan* untuk studio saya:\n\n*Studio:* ${appState.studioName}\n*Owner:* ${appState.ownerName}\n\nMohon info nomor rekening pembayarannya ya kak. Terima kasih!`);
-            window.open(`https://wa.me/${waNumber}?text=${textMsg}`, '_blank');
-        }
-
-        // --- TAMPILAN PRO YANG ELEGAN DAN BERSIH ---
-        function activateProUI() {
-            appState.isPro = true;
-            // Update Badge Header
-            document.getElementById('headerOwnerBadge').innerText = "GENMUA PRO";
-            document.getElementById('headerOwnerBadge').style.background = "#E8F5E9";
-            document.getElementById('headerOwnerBadge').style.color = "#2E7D32";
-            
-            // Update Card Status Akun
-            document.getElementById('accountStatusText').innerHTML = "<span style='color:#2E7D32;'>✅ PRO ACTIVE (Akses Tanpa Batas)</span>";
-            if(document.getElementById('btnUpgradePro')) {
-                document.getElementById('btnUpgradePro').style.display = 'none'; // Sembunyikan tombol upgrade
-            }
-        }
-
-        // --- UPDATE DASBOR ---
-        function updateDashboardStats() {
-            let netProfit = appState.uangMasuk - appState.uangKeluar;
-            
-            document.getElementById('totalOmzetDisplay').innerText = "Rp " + netProfit.toLocaleString('id-ID');
-            document.getElementById('netProfitDisplay').innerText = "Rp " + netProfit.toLocaleString('id-ID');
-            
-            document.getElementById('totalMasukDisplay').innerText = "Rp " + appState.uangMasuk.toLocaleString('id-ID');
-            document.getElementById('totalKeluarDisplay').innerText = "Rp " + appState.uangKeluar.toLocaleString('id-ID');
-            document.getElementById('countBooking').innerText = appState.projectCount;
-            document.getElementById('countKlien').innerText = appState.projectCount;
-            document.getElementById('countBelumLunas').innerText = appState.belumLunasCount;
-        }
-
-        function switchPage(pageKey) {
-            ['beranda', 'klien', 'keuangan', 'invoice', 'akun'].forEach(p => {
-                const elPage = document.getElementById('page' + p.charAt(0).toUpperCase() + p.slice(1));
-                const elNav = document.getElementById('nav' + p.charAt(0).toUpperCase() + p.slice(1));
-                if (elPage) elPage.classList.remove('active');
-                if (elNav) elNav.classList.remove('active');
-            });
-            document.getElementById('page' + pageKey.charAt(0).toUpperCase() + pageKey.slice(1)).classList.add('active');
-            document.getElementById('nav' + pageKey.charAt(0).toUpperCase() + pageKey.slice(1)).classList.add('active');
-        }
-
-        function formatRupiah(input) {
-            let val = input.value.replace(/[^,\d]/g, '').toString();
-            let split = val.split(','), sisa = split[0].length % 3;
-            let rupiah = split[0].substr(0, sisa), ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-            if (ribuan) rupiah += (sisa ? '.' : '') + ribuan.join('.');
-            input.value = rupiah;
-        }
-
-        function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 2500); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openExpenseModal() { document.getElementById('expenseModal').classList.add('active'); }
+        // ================= PENGATURAN DATA MUA =================
+        const STUDIO_NAME = "Nela Mua Studio";
+        const ADMIN_WHATSAPP = "6285366331038"; // Ganti dengan nomor WA Admin (Gunakan awalan 62)
         
-        function openBookingModal() { 
-            let deviceCreatedCount = parseInt(localStorage.getItem('genmua_deviceCreatedCount') || '0');
-            if (!appState.isPro && (appState.projectCount >= 5 || deviceCreatedCount >= 5)) { 
-                document.getElementById('limitModal').classList.add('active'); 
-                return; 
+        // Buat Inisial Logo (Contoh: "Nela Mua" jadi "NM")
+        const initials = STUDIO_NAME.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        document.getElementById('logoText').innerText = initials;
+        document.getElementById('namaStudio').innerText = STUDIO_NAME;
+
+        // Set Link Tombol Konsultasi Umum
+        document.getElementById('btnConsultWA').href = `https://wa.me/${ADMIN_WHATSAPP}?text=Halo%20Admin%20${encodeURIComponent(STUDIO_NAME)},%20saya%20mau%20konsultasi%20untuk%20makeup%20acara%20saya...`;
+
+        // ================= DATABASE KATALOG PAKET =================
+        // Anda bisa menambah, mengubah, atau menghapus paket di bawah ini
+        const packages = [
+            {
+                id: 1,
+                category: "Wedding",
+                title: "Paket Akad Nikah (Intimate)",
+                price: "Rp 1.500.000",
+                desc: "Riasan flawless dan tahan lama khusus untuk acara akad nikah yang sakral dan intim.",
+                includes: [
+                    "Makeup Akad Nikah untuk CPW",
+                    "Hijab Do / Hair Do (Simpel)",
+                    "Softlens & Fake Lashes",
+                    "Retouch 1x (Sebelum sesi foto)"
+                ]
+            },
+            {
+                id: 2,
+                category: "Wedding",
+                title: "Paket Resepsi Premium",
+                price: "Rp 3.500.000",
+                desc: "Tampil memukau dan manglingi di hari bahagiamu dengan makeup premium berkualitas internasional.",
+                includes: [
+                    "Makeup Resepsi untuk CPW",
+                    "Hijab Do / Hair Do & Pemasangan Aksesoris",
+                    "Free Makeup Ibu CPW (1 Orang)",
+                    "Softlens Premium & Fake Lashes",
+                    "Standby MUA sampai acara selesai"
+                ]
+            },
+            {
+                id: 3,
+                category: "Wisuda",
+                title: "Paket Wisuda / Graduation",
+                price: "Rp 350.000",
+                desc: "Tampil segar, cantik, dan elegan di hari kelulusan. Makeup ringan namun tahan lama.",
+                includes: [
+                    "Makeup Flawless Tahan Lama",
+                    "Hijab Styling / Hair Do Standard",
+                    "Bulu Mata Palsu Natural"
+                ]
+            },
+            {
+                id: 4,
+                category: "Event",
+                title: "Paket Party / Bridesmaid",
+                price: "Rp 400.000",
+                desc: "Paket makeup elegan untuk menghadiri pesta atau bertugas sebagai pendamping pengantin (Bridesmaid).",
+                includes: [
+                    "Makeup Glam / Natural Look",
+                    "Styling Rambut / Hijab",
+                    "Harga diskon jika booking >3 orang"
+                ]
+            },
+            {
+                id: 5,
+                category: "Prewedding",
+                title: "Makeup Prewedding (Outdoor)",
+                price: "Rp 800.000",
+                desc: "Makeup khusus sesi foto prewedding yang dirancang agar anti-luntur walau terkena keringat dan matahari.",
+                includes: [
+                    "Makeup CPW tahan lama",
+                    "Touchup ringan untuk CPP",
+                    "Standby MUA selama sesi foto (Maks 4 Jam)",
+                    "Ganti Look Makeup 1x"
+                ]
             }
-            document.getElementById('bookingModal').classList.add('active'); 
+        ];
+
+        // ================= LOGIKA APLIKASI =================
+        let currentCategory = 'Semua';
+        
+        // Ambil daftar kategori unik dari data paket
+        const categories = ['Semua', ...new Set(packages.map(p => p.category))];
+
+        // Fungsi Render Kategori (Tab Menu)
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = '';
+            
+            categories.forEach(cat => {
+                const btn = document.createElement('div');
+                btn.className = `cat-btn ${currentCategory === cat ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => {
+                    currentCategory = cat;
+                    renderCategories(); // Update UI active class
+                    renderPackages();   // Update list paket
+                };
+                container.appendChild(btn);
+            });
         }
+
+        // Fungsi Render List Paket
+        function renderPackages() {
+            const container = document.getElementById('packageContainer');
+            container.innerHTML = '';
+
+            // Filter paket berdasarkan tab yang dipilih
+            const filteredPackages = currentCategory === 'Semua' 
+                ? packages 
+                : packages.filter(p => p.category === currentCategory);
+
+            filteredPackages.forEach(pkg => {
+                let includesHtml = pkg.includes.map(item => `<li>${item}</li>`).join('');
+                
+                // Pesan otomatis WhatsApp jika tombol diklik
+                const waMessage = `Halo kak admin ${STUDIO_NAME}, saya tertarik dengan katalog:\n\n*${pkg.title}*\nHarga: ${pkg.price}\n\nApakah jadwal untuk tanggal [ISI_TANGGAL_ACARA] masih kosong?`;
+                const waLink = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
+
+                const cardHtml = `
+                    <div class="package-card">
+                        <div class="package-title">${pkg.title}</div>
+                        <div class="package-price">${pkg.price}</div>
+                        <div class="package-desc">${pkg.desc}</div>
+                        <ul class="package-includes">
+                            ${includesHtml}
+                        </ul>
+                        <a href="${waLink}" target="_blank" style="text-decoration: none;">
+                            <button class="btn-book">
+                                💬 Booking via WhatsApp
+                            </button>
+                        </a>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // Inisialisasi awal saat web dibuka
+        renderCategories();
+        renderPackages();
     </script>
 </body>
 </html>
