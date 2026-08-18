@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* TEMA WARNA SENADA DENGAN DASHBOARD MUA */
+            /* TEMA WARNA PINK CREAMY & GOLD MEWAH */
             --bg-main: #FFF5F0; 
             --card-bg: #FFFFFF; 
             --text-main: #2A1E1A; 
@@ -22,7 +22,7 @@
         /* WADAH MOBILE FRIENDLY */
         .app-container {
             width: 100%; max-width: 420px; background: var(--card-bg); 
-            box-shadow: 0 10px 30px rgba(42, 30, 26, 0.08); 
+            box-shadow: 0 10px 30px rgba(42, 30, 26, 0.08); border: 2px solid var(--border);
             display: flex; flex-direction: column; position: relative; min-height: 100vh;
         }
 
@@ -34,8 +34,8 @@
         .studio-logo { 
             width: 70px; height: 70px; background: var(--accent); color: white; 
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 28px; font-weight: 800; margin: 0 auto 12px;
-            box-shadow: 0 4px 15px rgba(197, 164, 126, 0.4);
+            font-size: 24px; font-weight: 800; margin: 0 auto 12px;
+            box-shadow: 0 4px 15px rgba(197, 164, 126, 0.4); border: 2px solid #FFF;
         }
         .header h1 { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
         .header p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
@@ -43,179 +43,190 @@
         /* KATEGORI FILTER */
         .category-wrapper {
             display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px;
-            border-bottom: 1px solid var(--border); background: var(--card-bg);
-            scrollbar-width: none; /* Firefox */
+            border-bottom: 2px solid var(--border); background: var(--card-bg);
+            scrollbar-width: none;
         }
-        .category-wrapper::-webkit-scrollbar { display: none; /* Chrome */ }
+        .category-wrapper::-webkit-scrollbar { display: none; }
         
         .cat-btn {
-            padding: 8px 16px; background: #FFFBF9; border: 1px solid var(--border);
-            border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text-muted);
+            padding: 8px 16px; background: #FFFBF9; border: 1.5px solid var(--border);
+            border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--text-muted);
             cursor: pointer; white-space: nowrap; transition: 0.3s;
         }
         .cat-btn.active { background: var(--text-main); color: #FFF; border-color: var(--text-main); }
 
-        /* LIST PAKET */
+        /* LIST PAKET KATALOG */
         .catalog-content { padding: 20px; flex-grow: 1; padding-bottom: 100px; background: #FFFBF9; }
         
         .package-card {
             background: var(--card-bg); border: 2px solid var(--border);
-            border-radius: 16px; padding: 20px; margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: 0.3s;
+            border-radius: 18px; overflow: hidden; margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); transition: 0.3s;
         }
+
+        /* CONTAINER FOTO DENGAN EFEK BADGE HOVER */
+        .package-image-box {
+            position: relative; width: 100%; height: 210px; background: #EAE3DD;
+            overflow: hidden; cursor: pointer;
+        }
+        .package-image-box img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+        }
+        .package-image-box:hover img { transform: scale(1.05); }
+        .zoom-badge {
+            position: absolute; bottom: 10px; right: 10px; background: rgba(42, 30, 26, 0.75);
+            color: #FFF; font-size: 10px; font-weight: 700; padding: 5px 10px; border-radius: 12px;
+            backdrop-filter: blur(4px); display: flex; align-items: center; gap: 4px;
+        }
+
+        .package-body { padding: 18px; }
         .package-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
         .package-price { font-size: 18px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
         
-        .package-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
-        .package-includes { margin-bottom: 15px; }
+        .package-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
+        .package-includes { margin-bottom: 16px; border-top: 1px dashed var(--border); padding-top: 12px; }
         .package-includes li { 
-            font-size: 11px; color: var(--text-main); margin-bottom: 6px; 
+            font-size: 11.5px; color: var(--text-main); margin-bottom: 6px; 
             list-style: none; display: flex; align-items: flex-start; gap: 6px;
         }
         .package-includes li::before { content: '✨'; font-size: 10px; margin-top: 1px; }
 
         .btn-book {
-            width: 100%; padding: 12px; background: linear-gradient(90deg, #C5A47E 0%, #E3CDA9 100%);
-            color: #2A1E1A; border: none; border-radius: 12px; font-size: 13px; font-weight: 800;
+            width: 100%; padding: 13px; background: linear-gradient(90deg, #C5A47E 0%, #E3CDA9 100%);
+            color: #2A1E1A; border: 1px solid var(--border); border-radius: 12px; font-size: 13px; font-weight: 800;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: opacity 0.2s;
         }
-        .btn-book:active { opacity: 0.8; }
 
         /* FLOATING FOOTER CONTACT */
         .floating-footer {
             position: fixed; bottom: 0; width: 100%; max-width: 420px;
-            background: var(--card-bg); padding: 15px 20px;
+            background: var(--card-bg); padding: 14px 20px;
             border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+            z-index: 99;
         }
         .footer-text h4 { font-size: 12px; font-weight: 700; color: var(--text-main); }
         .footer-text p { font-size: 10px; color: var(--text-muted); }
         .btn-consult {
-            padding: 10px 20px; background: var(--text-main); color: #fff;
-            border-radius: 12px; font-size: 12px; font-weight: 700; text-decoration: none;
+            padding: 10px 18px; background: var(--text-main); color: #fff;
+            border-radius: 12px; font-size: 11px; font-weight: 700; text-decoration: none;
         }
+
+        /* MODAL POPUP PREVIEW FOTO FULLSCREEN */
+        .image-modal {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .image-modal.active { display: flex; }
+        .image-modal img { max-width: 100%; max-height: 80vh; border-radius: 14px; border: 2px solid #FFF; }
+        .close-preview { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 28px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         
-        <!-- HEADER STUDIO -->
         <div class="header">
-            <div class="studio-logo" id="logoText">NM</div>
-            <h1 id="namaStudio">Nela Mua Studio</h1>
-            <p>Make your special day more beautiful.<br>Pricelist & Layanan Rias Profesional.</p>
+            <div class="studio-logo" id="logoText">MUA</div>
+            <h1 id="namaStudio">Nama Studio MUA</h1>
+            <p>Make your special day more beautiful.<br>Pricelist & Portfolio Rias Profesional.</p>
         </div>
 
-        <!-- MENU KATEGORI -->
-        <div class="category-wrapper" id="categoryContainer">
-            <!-- Kategori di-generate via JavaScript -->
-        </div>
+        <div class="category-wrapper" id="categoryContainer"></div>
 
-        <!-- DAFTAR PAKET -->
-        <div class="catalog-content" id="packageContainer">
-            <!-- Paket di-generate via JavaScript -->
-        </div>
+        <div class="catalog-content" id="packageContainer"></div>
 
-        <!-- FOOTER KONSULTASI -->
         <div class="floating-footer">
             <div class="footer-text">
-                <h4>Butuh Custom Paket?</h4>
+                <h4>Tanya Tanggal / Custom Paket?</h4>
                 <p>Konsultasikan riasan impianmu.</p>
             </div>
-            <a href="#" class="btn-consult" id="btnConsultWA">Chat Admin</a>
+            <a href="#" class="btn-consult" id="btnConsultWA" target="_blank">Chat Admin</a>
         </div>
     </div>
 
+    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
+        <span class="close-preview">&times;</span>
+        <img id="modalImgSrc" src="" alt="Preview Foto Makeup">
+    </div>
+
     <script>
-        // ================= PENGATURAN DATA MUA =================
-        const STUDIO_NAME = "Nela Mua Studio";
-        const ADMIN_WHATSAPP = "6285366331038"; // Ganti dengan nomor WA Admin (Gunakan awalan 62)
-        
-        // Buat Inisial Logo (Contoh: "Nela Mua" jadi "NM")
-        const initials = STUDIO_NAME.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        // ================= DUKUNGAN URL PARAMETER (DINAMIS SAMA SEPERTI APLIKASI UTAMA) =================
+        const urlParams = new URLSearchParams(window.location.search);
+        const STUDIO_NAME = urlParams.get('studio') || "Nela Mua Studio";
+        const ADMIN_WHATSAPP = urlParams.get('wa') || "6281234567890"; // Nomor WhatsApp bawaan jika tidak diisi
+
+        // Set Inisial Logo & Judul Studio
+        const initials = STUDIO_NAME.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
         document.getElementById('logoText').innerText = initials;
         document.getElementById('namaStudio').innerText = STUDIO_NAME;
 
-        // Set Link Tombol Konsultasi Umum
-        document.getElementById('btnConsultWA').href = `https://wa.me/${ADMIN_WHATSAPP}?text=Halo%20Admin%20${encodeURIComponent(STUDIO_NAME)},%20saya%20mau%20konsultasi%20untuk%20makeup%20acara%20saya...`;
+        // Set Link Konsultasi WhatsApp
+        document.getElementById('btnConsultWA').href = `https://wa.me/${ADMIN_WHATSAPP}?text=Halo%20Admin%20${encodeURIComponent(STUDIO_NAME)},%20saya%20mau%20konsultasi%20makeup...`;
 
-        // ================= DATABASE KATALOG PAKET =================
-        // Anda bisa menambah, mengubah, atau menghapus paket di bawah ini
+        // ================= DATABASE PAKET DILENGKAPI FOTO REFERENSI =================
+        // Catatan: Ganti URL gambar di bawah ini dengan link foto portofolio MUA asli (Bisa foto dari Unsplash, GitHub Assets, Imgur, dll)
         const packages = [
             {
                 id: 1,
                 category: "Wedding",
-                title: "Paket Akad Nikah (Intimate)",
+                title: "Paket Akad Nikah (Flawless Intimate)",
                 price: "Rp 1.500.000",
-                desc: "Riasan flawless dan tahan lama khusus untuk acara akad nikah yang sakral dan intim.",
+                image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80",
+                desc: "Riasan flawless, halus, dan tahan lama khusus untuk momen sakral akad nikah.",
                 includes: [
-                    "Makeup Akad Nikah untuk CPW",
-                    "Hijab Do / Hair Do (Simpel)",
-                    "Softlens & Fake Lashes",
-                    "Retouch 1x (Sebelum sesi foto)"
+                    "Makeup Akad Nikah CPW (Look Flawless / Bold)",
+                    "Hijab Do / Hair Do & Pemasangan Melati",
+                    "Softlens Premium & Bulu Mata Palsu Double",
+                    "Retouch 1x Sebelum Foto Keluarga"
                 ]
             },
             {
                 id: 2,
                 category: "Wedding",
-                title: "Paket Resepsi Premium",
+                title: "Paket Resepsi Grand Wedding",
                 price: "Rp 3.500.000",
-                desc: "Tampil memukau dan manglingi di hari bahagiamu dengan makeup premium berkualitas internasional.",
+                image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80",
+                desc: "Tampil memukau dan pangling di atas pelaminan dengan teknik makeup luxury HD.",
                 includes: [
                     "Makeup Resepsi untuk CPW",
-                    "Hijab Do / Hair Do & Pemasangan Aksesoris",
-                    "Free Makeup Ibu CPW (1 Orang)",
-                    "Softlens Premium & Fake Lashes",
-                    "Standby MUA sampai acara selesai"
+                    "Hijab Do / Hair Do & Aksesoris Mahkota",
+                    "Bonus: Makeup Ibu Pengantin (1 Orang)",
+                    "Softlens Premium & Fake Lashes 3D",
+                    "Standby MUA hingga acara selesai"
                 ]
             },
             {
                 id: 3,
                 category: "Wisuda",
-                title: "Paket Wisuda / Graduation",
+                title: "Paket Wisuda / Graduation Look",
                 price: "Rp 350.000",
-                desc: "Tampil segar, cantik, dan elegan di hari kelulusan. Makeup ringan namun tahan lama.",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+                desc: "Makeup segar, awet seharian di bawah matahari, dan tetap terlihat natural saat difoto.",
                 includes: [
-                    "Makeup Flawless Tahan Lama",
-                    "Hijab Styling / Hair Do Standard",
-                    "Bulu Mata Palsu Natural"
+                    "Makeup Fresh Graduation Look",
+                    "Styling Rambut / Hijab Rapih Tahan Angin",
+                    "Bulu Mata Natural High Quality"
                 ]
             },
             {
                 id: 4,
                 category: "Event",
-                title: "Paket Party / Bridesmaid",
+                title: "Paket Party / Bridesmaid Look",
                 price: "Rp 400.000",
-                desc: "Paket makeup elegan untuk menghadiri pesta atau bertugas sebagai pendamping pengantin (Bridesmaid).",
+                desc: "Tampil menawan saat menghadiri pesta pernikahan sahabat atau bertugas sebagai bridesmaid.",
                 includes: [
-                    "Makeup Glam / Natural Look",
-                    "Styling Rambut / Hijab",
-                    "Harga diskon jika booking >3 orang"
-                ]
-            },
-            {
-                id: 5,
-                category: "Prewedding",
-                title: "Makeup Prewedding (Outdoor)",
-                price: "Rp 800.000",
-                desc: "Makeup khusus sesi foto prewedding yang dirancang agar anti-luntur walau terkena keringat dan matahari.",
-                includes: [
-                    "Makeup CPW tahan lama",
-                    "Touchup ringan untuk CPP",
-                    "Standby MUA selama sesi foto (Maks 4 Jam)",
-                    "Ganti Look Makeup 1x"
+                    "Makeup Glamour / Natural Look (Custom Request)",
+                    "Hair Styling / Hijab Do modern",
+                    "Diskon Khusus jika booking min. 3 Orang"
                 ]
             }
         ];
 
-        // ================= LOGIKA APLIKASI =================
+        // ================= LOGIKA INTERAKTIF KATALOG =================
         let currentCategory = 'Semua';
-        
-        // Ambil daftar kategori unik dari data paket
         const categories = ['Semua', ...new Set(packages.map(p => p.category))];
 
-        // Fungsi Render Kategori (Tab Menu)
         function renderCategories() {
             const container = document.getElementById('categoryContainer');
             container.innerHTML = '';
@@ -226,19 +237,17 @@
                 btn.innerText = cat;
                 btn.onclick = () => {
                     currentCategory = cat;
-                    renderCategories(); // Update UI active class
-                    renderPackages();   // Update list paket
+                    renderCategories();
+                    renderPackages();
                 };
                 container.appendChild(btn);
             });
         }
 
-        // Fungsi Render List Paket
         function renderPackages() {
             const container = document.getElementById('packageContainer');
             container.innerHTML = '';
 
-            // Filter paket berdasarkan tab yang dipilih
             const filteredPackages = currentCategory === 'Semua' 
                 ? packages 
                 : packages.filter(p => p.category === currentCategory);
@@ -246,30 +255,45 @@
             filteredPackages.forEach(pkg => {
                 let includesHtml = pkg.includes.map(item => `<li>${item}</li>`).join('');
                 
-                // Pesan otomatis WhatsApp jika tombol diklik
-                const waMessage = `Halo kak admin ${STUDIO_NAME}, saya tertarik dengan katalog:\n\n*${pkg.title}*\nHarga: ${pkg.price}\n\nApakah jadwal untuk tanggal [ISI_TANGGAL_ACARA] masih kosong?`;
+                const waMessage = `Halo kak Admin *${STUDIO_NAME}*,\n\nSaya tertarik booking paket di katalog ini:\n\n📌 *${pkg.title}*\n🏷️ *Harga:* ${pkg.price}\n\nApakah jadwal acara untuk tanggal [Sebutkan Tanggal] masih tersedia?`;
                 const waLink = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
 
                 const cardHtml = `
                     <div class="package-card">
-                        <div class="package-title">${pkg.title}</div>
-                        <div class="package-price">${pkg.price}</div>
-                        <div class="package-desc">${pkg.desc}</div>
-                        <ul class="package-includes">
-                            ${includesHtml}
-                        </ul>
-                        <a href="${waLink}" target="_blank" style="text-decoration: none;">
-                            <button class="btn-book">
-                                💬 Booking via WhatsApp
-                            </button>
-                        </a>
+                        <div class="package-image-box" onclick="openImageModal('${pkg.image}')">
+                            <img src="${pkg.image}" alt="${pkg.title}">
+                            <div class="zoom-badge">🔍 Klik Foto untuk Zoom</div>
+                        </div>
+
+                        <div class="package-body">
+                            <div class="package-title">${pkg.title}</div>
+                            <div class="package-price">${pkg.price}</div>
+                            <div class="package-desc">${pkg.desc}</div>
+                            <ul class="package-includes">
+                                ${includesHtml}
+                            </ul>
+                            <a href="${waLink}" target="_blank" style="text-decoration: none;">
+                                <button class="btn-book">
+                                    💬 Booking via WhatsApp
+                                </button>
+                            </a>
+                        </div>
                     </div>
                 `;
                 container.insertAdjacentHTML('beforeend', cardHtml);
             });
         }
 
-        // Inisialisasi awal saat web dibuka
+        // FUNGSI ZOOM FOTO FULLSCREEN
+        function openImageModal(imgSrc) {
+            document.getElementById('modalImgSrc').src = imgSrc;
+            document.getElementById('imageModal').classList.add('active');
+        }
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // JALANKAN SAAT DIBUKA
         renderCategories();
         renderPackages();
     </script>
