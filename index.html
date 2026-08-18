@@ -1,301 +1,697 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricelist & Katalog MUA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            /* TEMA WARNA PINK CREAMY & GOLD MEWAH */
-            --bg-main: #FFF5F0; 
-            --card-bg: #FFFFFF; 
-            --text-main: #2A1E1A; 
-            --text-muted: #7A6862; 
-            --accent: #C5A47E; 
-            --border: #DBC5BC;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
-        
-        /* WADAH MOBILE FRIENDLY */
-        .app-container {
-            width: 100%; max-width: 420px; background: var(--card-bg); 
-            box-shadow: 0 10px 30px rgba(42, 30, 26, 0.08); border: 2px solid var(--border);
-            display: flex; flex-direction: column; position: relative; min-height: 100vh;
-        }
+import React, { useState, useRef } from "react";
+import { Camera, Plus, X, Sparkles, MessageCircle, Pencil } from "lucide-react";
 
-        /* HEADER KATALOG */
-        .header { 
-            padding: 30px 20px 20px; text-align: center; background: linear-gradient(135deg, #FFFBF9 0%, #FFF5F0 100%);
-            border-bottom: 2px solid var(--border);
-        }
-        .studio-logo { 
-            width: 70px; height: 70px; background: var(--accent); color: white; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-size: 24px; font-weight: 800; margin: 0 auto 12px;
-            box-shadow: 0 4px 15px rgba(197, 164, 126, 0.4); border: 2px solid #FFF;
-        }
-        .header h1 { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
-        .header p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+// ---------- Palet & Token Desain ----------
+// Marun Pekat  #6B1E23  -> aksen adat, tombol utama
+// Emas Pudar   #C9A227  -> garis, ornamen, harga
+// Krem Beludru #F7EDE2  -> latar halaman
+// Gading       #FFFBF5  -> permukaan kartu
+// Cokelat Tua  #2E1A14  -> teks utama
+// Blush Pudar  #EFD9D3  -> latar sekunder / hover
 
-        /* KATEGORI FILTER */
-        .category-wrapper {
-            display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px;
-            border-bottom: 2px solid var(--border); background: var(--card-bg);
-            scrollbar-width: none;
-        }
-        .category-wrapper::-webkit-scrollbar { display: none; }
-        
-        .cat-btn {
-            padding: 8px 16px; background: #FFFBF9; border: 1.5px solid var(--border);
-            border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--text-muted);
-            cursor: pointer; white-space: nowrap; transition: 0.3s;
-        }
-        .cat-btn.active { background: var(--text-main); color: #FFF; border-color: var(--text-main); }
+const COLORS = {
+  marun: "#6B1E23",
+  marunGelap: "#4A1418",
+  emas: "#C9A227",
+  emasMuda: "#E4CB86",
+  krem: "#F7EDE2",
+  gading: "#FFFBF5",
+  cokelat: "#2E1A14",
+  cokelatMuda: "#7A6A5F",
+  blush: "#EFD9D3",
+};
 
-        /* LIST PAKET KATALOG */
-        .catalog-content { padding: 20px; flex-grow: 1; padding-bottom: 100px; background: #FFFBF9; }
-        
-        .package-card {
-            background: var(--card-bg); border: 2px solid var(--border);
-            border-radius: 18px; overflow: hidden; margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04); transition: 0.3s;
-        }
+let idCounter = 100;
+const nextId = () => idCounter++;
 
-        /* CONTAINER FOTO DENGAN EFEK BADGE HOVER */
-        .package-image-box {
-            position: relative; width: 100%; height: 210px; background: #EAE3DD;
-            overflow: hidden; cursor: pointer;
-        }
-        .package-image-box img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
-        }
-        .package-image-box:hover img { transform: scale(1.05); }
-        .zoom-badge {
-            position: absolute; bottom: 10px; right: 10px; background: rgba(42, 30, 26, 0.75);
-            color: #FFF; font-size: 10px; font-weight: 700; padding: 5px 10px; border-radius: 12px;
-            backdrop-filter: blur(4px); display: flex; align-items: center; gap: 4px;
-        }
+// ---------- Komponen kecil: teks yang bisa diklik & diedit langsung ----------
+function Editable({ as: Tag = "div", value, onChange, className = "", style = {}, placeholder = "" }) {
+  return (
+    <Tag
+      contentEditable
+      suppressContentEditableWarning
+      onBlur={(e) => onChange(e.currentTarget.textContent)}
+      data-placeholder={placeholder}
+      className={"editable-field " + className}
+      style={style}
+    >
+      {value}
+    </Tag>
+  );
+}
 
-        .package-body { padding: 18px; }
-        .package-title { font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
-        .package-price { font-size: 18px; font-weight: 800; color: var(--accent); margin-bottom: 12px; }
-        
-        .package-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
-        .package-includes { margin-bottom: 16px; border-top: 1px dashed var(--border); padding-top: 12px; }
-        .package-includes li { 
-            font-size: 11.5px; color: var(--text-main); margin-bottom: 6px; 
-            list-style: none; display: flex; align-items: flex-start; gap: 6px;
-        }
-        .package-includes li::before { content: '✨'; font-size: 10px; margin-top: 1px; }
-
-        .btn-book {
-            width: 100%; padding: 13px; background: linear-gradient(90deg, #C5A47E 0%, #E3CDA9 100%);
-            color: #2A1E1A; border: 1px solid var(--border); border-radius: 12px; font-size: 13px; font-weight: 800;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-
-        /* FLOATING FOOTER CONTACT */
-        .floating-footer {
-            position: fixed; bottom: 0; width: 100%; max-width: 420px;
-            background: var(--card-bg); padding: 14px 20px;
-            border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center;
-            z-index: 99;
-        }
-        .footer-text h4 { font-size: 12px; font-weight: 700; color: var(--text-main); }
-        .footer-text p { font-size: 10px; color: var(--text-muted); }
-        .btn-consult {
-            padding: 10px 18px; background: var(--text-main); color: #fff;
-            border-radius: 12px; font-size: 11px; font-weight: 700; text-decoration: none;
-        }
-
-        /* MODAL POPUP PREVIEW FOTO FULLSCREEN */
-        .image-modal {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 1000;
-            justify-content: center; align-items: center; padding: 20px;
-        }
-        .image-modal.active { display: flex; }
-        .image-modal img { max-width: 100%; max-height: 80vh; border-radius: 14px; border: 2px solid #FFF; }
-        .close-preview { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 28px; cursor: pointer; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        
-        <div class="header">
-            <div class="studio-logo" id="logoText">MUA</div>
-            <h1 id="namaStudio">Nama Studio MUA</h1>
-            <p>Make your special day more beautiful.<br>Pricelist & Portfolio Rias Profesional.</p>
+// ---------- Bingkai lengkung ala gapura pelaminan, tempat unggah foto ----------
+function ArchUpload({ image, onUpload, height = 260, label = "Unggah foto" }) {
+  const inputRef = useRef(null);
+  const handleFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => onUpload(reader.result);
+    reader.readAsDataURL(file);
+  };
+  return (
+    <div
+      onClick={() => inputRef.current?.click()}
+      style={{
+        position: "relative",
+        height,
+        borderRadius: `${height / 2}px ${height / 2}px 10px 10px`,
+        overflow: "hidden",
+        cursor: "pointer",
+        border: `2px solid ${COLORS.emas}`,
+        boxShadow: `0 0 0 5px ${COLORS.gading}, 0 0 0 6px ${COLORS.emasMuda}`,
+        background: image
+          ? `center/cover no-repeat url(${image})`
+          : `linear-gradient(160deg, ${COLORS.blush}, ${COLORS.krem})`,
+        flexShrink: 0,
+      }}
+    >
+      <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} style={{ display: "none" }} />
+      {!image && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            color: COLORS.marun,
+          }}
+        >
+          <Camera size={28} strokeWidth={1.5} />
+          <span style={{ fontSize: 13, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 500, textAlign: "center", padding: "0 20px" }}>
+            {label}
+          </span>
         </div>
+      )}
+      {image && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            width: 30,
+            height: 30,
+            borderRadius: "50%",
+            background: "rgba(46,26,20,0.55)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Pencil size={14} color="#fff" />
+        </div>
+      )}
+    </div>
+  );
+}
 
-        <div class="category-wrapper" id="categoryContainer"></div>
+// ---------- Kartu Paket ----------
+function PackageCard({ pkg, onChange, onRemove }) {
+  const setField = (field, val) => onChange({ ...pkg, [field]: val });
 
-        <div class="catalog-content" id="packageContainer"></div>
+  const setItem = (id, text) =>
+    onChange({ ...pkg, items: pkg.items.map((it) => (it.id === id ? { ...it, text } : it)) });
 
-        <div class="floating-footer">
-            <div class="footer-text">
-                <h4>Tanya Tanggal / Custom Paket?</h4>
-                <p>Konsultasikan riasan impianmu.</p>
+  const addItem = () =>
+    onChange({ ...pkg, items: [...pkg.items, { id: nextId(), text: "Item baru, klik untuk edit" }] });
+
+  const removeItem = (id) =>
+    onChange({ ...pkg, items: pkg.items.filter((it) => it.id !== id) });
+
+  return (
+    <div
+      style={{
+        background: COLORS.gading,
+        borderRadius: 18,
+        padding: 20,
+        border: `1px solid ${COLORS.blush}`,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        position: "relative",
+      }}
+      className="group"
+    >
+      <button
+        onClick={onRemove}
+        title="Hapus paket"
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          zIndex: 5,
+          width: 26,
+          height: 26,
+          borderRadius: "50%",
+          background: "rgba(46,26,20,0.55)",
+          color: "#fff",
+          border: "none",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          opacity: 0,
+          transition: "opacity .15s",
+        }}
+        className="remove-btn"
+      >
+        <X size={14} />
+      </button>
+
+      <ArchUpload image={pkg.image} onUpload={(img) => setField("image", img)} height={200} label="Unggah foto hasil riasan" />
+
+      <div style={{ textAlign: "center" }}>
+        <Editable
+          as="h3"
+          value={pkg.title}
+          onChange={(v) => setField("title", v)}
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontSize: 21,
+            fontWeight: 600,
+            color: COLORS.marun,
+            margin: 0,
+            letterSpacing: "0.01em",
+          }}
+        />
+        <Editable
+          as="p"
+          value={pkg.price}
+          onChange={(v) => setField("price", v)}
+          style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: 15,
+            fontWeight: 600,
+            color: COLORS.emas,
+            margin: "4px 0 0",
+            letterSpacing: "0.03em",
+          }}
+        />
+      </div>
+
+      <div style={{ borderTop: `1px dashed ${COLORS.blush}`, paddingTop: 14 }}>
+        <p
+          style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: 11,
+            fontWeight: 600,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: COLORS.cokelatMuda,
+            margin: "0 0 10px",
+          }}
+        >
+          Yang kamu dapat
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {pkg.items.map((it) => (
+            <div key={it.id} style={{ display: "flex", alignItems: "flex-start", gap: 8 }} className="item-row">
+              <span style={{ color: COLORS.marun, fontSize: 14, lineHeight: "22px", flexShrink: 0 }}>✦</span>
+              <Editable
+                as="span"
+                value={it.text}
+                onChange={(v) => setItem(it.id, v)}
+                style={{
+                  flex: 1,
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  fontSize: 14,
+                  color: COLORS.cokelat,
+                  lineHeight: "22px",
+                }}
+              />
+              <button
+                onClick={() => removeItem(it.id)}
+                style={{
+                  border: "none",
+                  background: "none",
+                  color: COLORS.cokelatMuda,
+                  cursor: "pointer",
+                  padding: 2,
+                  opacity: 0,
+                  transition: "opacity .15s",
+                }}
+                className="del-item"
+                title="Hapus item"
+              >
+                <X size={13} />
+              </button>
             </div>
-            <a href="#" class="btn-consult" id="btnConsultWA" target="_blank">Chat Admin</a>
+          ))}
         </div>
+        <button
+          onClick={addItem}
+          style={{
+            marginTop: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            background: "none",
+            border: "none",
+            color: COLORS.marun,
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: 13,
+            fontWeight: 600,
+            cursor: "pointer",
+            padding: "4px 0",
+          }}
+        >
+          <Plus size={14} /> Tambah yang didapat
+        </button>
+      </div>
     </div>
+  );
+}
 
-    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
-        <span class="close-preview">&times;</span>
-        <img id="modalImgSrc" src="" alt="Preview Foto Makeup">
+// ---------- Pemisah motif kecil ala songket ----------
+function Divider() {
+  const dots = new Array(23).fill(0);
+  return (
+    <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "8px 0 36px" }}>
+      {dots.map((_, i) => (
+        <span
+          key={i}
+          style={{
+            width: 5,
+            height: 5,
+            borderRadius: i % 3 === 0 ? "50%" : 1,
+            background: i % 3 === 0 ? COLORS.emas : COLORS.blush,
+            transform: i % 3 === 0 ? "none" : "rotate(45deg)",
+          }}
+        />
+      ))}
     </div>
+  );
+}
 
-    <script>
-        // ================= DUKUNGAN URL PARAMETER (DINAMIS SAMA SEPERTI APLIKASI UTAMA) =================
-        const urlParams = new URLSearchParams(window.location.search);
-        const STUDIO_NAME = urlParams.get('studio') || "Nela Mua Studio";
-        const ADMIN_WHATSAPP = urlParams.get('wa') || "6281234567890"; // Nomor WhatsApp bawaan jika tidak diisi
+export default function KatalogMUA() {
+  const [studioName, setStudioName] = useState("Studio Rias Ayunda");
+  const [eyebrow, setEyebrow] = useState("MUA & Hairdo · Jakarta · Est. 2026");
+  const [heroTitle, setHeroTitle] = useState("Riasan yang Bercerita");
+  const [heroDesc, setHeroDesc] = useState(
+    "Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template."
+  );
+  const [heroImage, setHeroImage] = useState(null);
+  const [waNumber, setWaNumber] = useState("6281234567890");
 
-        // Set Inisial Logo & Judul Studio
-        const initials = STUDIO_NAME.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
-        document.getElementById('logoText').innerText = initials;
-        document.getElementById('namaStudio').innerText = STUDIO_NAME;
+  const [gallery, setGallery] = useState([
+    { id: nextId(), image: null },
+    { id: nextId(), image: null },
+    { id: nextId(), image: null },
+    { id: nextId(), image: null },
+  ]);
 
-        // Set Link Konsultasi WhatsApp
-        document.getElementById('btnConsultWA').href = `https://wa.me/${ADMIN_WHATSAPP}?text=Halo%20Admin%20${encodeURIComponent(STUDIO_NAME)},%20saya%20mau%20konsultasi%20makeup...`;
+  const [packages, setPackages] = useState([
+    {
+      id: nextId(),
+      image: null,
+      title: "Paket Akad",
+      price: "Rp 1.200.000",
+      items: [
+        { id: nextId(), text: "Riasan pengantin akad, natural namun berkarakter" },
+        { id: nextId(), text: "Hairdo sanggul modern atau hijab syar'i" },
+        { id: nextId(), text: "Retouch 2x selama prosesi berlangsung" },
+        { id: nextId(), text: "Free 1 asisten MUA di hari-H" },
+      ],
+    },
+    {
+      id: nextId(),
+      image: null,
+      title: "Paket Resepsi",
+      price: "Rp 2.500.000",
+      items: [
+        { id: nextId(), text: "Riasan pengantin resepsi, efek glowing tahan lama" },
+        { id: nextId(), text: "Sanggul + aksesoris kepala lengkap" },
+        { id: nextId(), text: "Ganti riasan untuk 2 sesi acara" },
+        { id: nextId(), text: "Dokumentasi behind the scene untuk kamu" },
+      ],
+    },
+    {
+      id: nextId(),
+      image: null,
+      title: "Paket Lamaran",
+      price: "Rp 900.000",
+      items: [
+        { id: nextId(), text: "Riasan natural glowing, cocok untuk foto" },
+        { id: nextId(), text: "Hairdo simple elegant" },
+        { id: nextId(), text: "Free trial makeup sebelum hari-H" },
+        { id: nextId(), text: "Konsultasi gaya 1x via chat" },
+      ],
+    },
+  ]);
 
-        // ================= DATABASE PAKET DILENGKAPI FOTO REFERENSI =================
-        // Catatan: Ganti URL gambar di bawah ini dengan link foto portofolio MUA asli (Bisa foto dari Unsplash, GitHub Assets, Imgur, dll)
-        const packages = [
-            {
-                id: 1,
-                category: "Wedding",
-                title: "Paket Akad Nikah (Flawless Intimate)",
-                price: "Rp 1.500.000",
-                image: "https://cdn.phototourl.com/free/2026-08-18-fa14724e-c1f6-400e-a549-10287535a32a.png",
-                desc: "Riasan flawless, halus, dan tahan lama khusus untuk momen sakral akad nikah.",
-                includes: [
-                    "Makeup Akad Nikah CPW (Look Flawless / Bold)",
-                    "Hijab Do / Hair Do & Pemasangan Melati",
-                    "Softlens Premium & Bulu Mata Palsu Double",
-                    "Retouch 1x Sebelum Foto Keluarga"
-                ]
-            },
-            {
-                id: 2,
-                category: "Wedding",
-                title: "Paket Resepsi Grand Wedding",
-                price: "Rp 3.500.000",
-                image: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80",
-                desc: "Tampil memukau dan pangling di atas pelaminan dengan teknik makeup luxury HD.",
-                includes: [
-                    "Makeup Resepsi untuk CPW",
-                    "Hijab Do / Hair Do & Aksesoris Mahkota",
-                    "Bonus: Makeup Ibu Pengantin (1 Orang)",
-                    "Softlens Premium & Fake Lashes 3D",
-                    "Standby MUA hingga acara selesai"
-                ]
-            },
-            {
-                id: 3,
-                category: "Wisuda",
-                title: "Paket Wisuda / Graduation Look",
-                price: "Rp 350.000",
-                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
-                desc: "Makeup segar, awet seharian di bawah matahari, dan tetap terlihat natural saat difoto.",
-                includes: [
-                    "Makeup Fresh Graduation Look",
-                    "Styling Rambut / Hijab Rapih Tahan Angin",
-                    "Bulu Mata Natural High Quality"
-                ]
-            },
-            {
-                id: 4,
-                category: "Event",
-                title: "Paket Party / Bridesmaid Look",
-                price: "Rp 400.000",
-                desc: "Tampil menawan saat menghadiri pesta pernikahan sahabat atau bertugas sebagai bridesmaid.",
-                includes: [
-                    "Makeup Glamour / Natural Look (Custom Request)",
-                    "Hair Styling / Hijab Do modern",
-                    "Diskon Khusus jika booking min. 3 Orang"
-                ]
-            }
-        ];
+  const addPackage = () =>
+    setPackages([
+      ...packages,
+      {
+        id: nextId(),
+        image: null,
+        title: "Paket Baru",
+        price: "Rp 0",
+        items: [{ id: nextId(), text: "Klik untuk edit item ini" }],
+      },
+    ]);
 
-        // ================= LOGIKA INTERAKTIF KATALOG =================
-        let currentCategory = 'Semua';
-        const categories = ['Semua', ...new Set(packages.map(p => p.category))];
+  const updatePackage = (id, updated) =>
+    setPackages(packages.map((p) => (p.id === id ? updated : p)));
 
-        function renderCategories() {
-            const container = document.getElementById('categoryContainer');
-            container.innerHTML = '';
-            
-            categories.forEach(cat => {
-                const btn = document.createElement('div');
-                btn.className = `cat-btn ${currentCategory === cat ? 'active' : ''}`;
-                btn.innerText = cat;
-                btn.onclick = () => {
-                    currentCategory = cat;
-                    renderCategories();
-                    renderPackages();
-                };
-                container.appendChild(btn);
-            });
+  const removePackage = (id) => setPackages(packages.filter((p) => p.id !== id));
+
+  const updateGalleryImg = (id, img) =>
+    setGallery(gallery.map((g) => (g.id === id ? { ...g, image: img } : g)));
+
+  return (
+    <div
+      style={{
+        background: COLORS.krem,
+        minHeight: "100vh",
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        color: COLORS.cokelat,
+        paddingBottom: 60,
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        .editable-field { outline: none; cursor: text; border-radius: 6px; transition: background .15s; }
+        .editable-field:hover { background: rgba(201,162,39,0.10); }
+        .editable-field:focus { background: rgba(201,162,39,0.16); box-shadow: 0 0 0 1px ${COLORS.emas}; }
+        .editable-field:empty:before { content: attr(data-placeholder); color: ${COLORS.cokelatMuda}; }
+
+        .group:hover .remove-btn { opacity: 1; }
+        .item-row:hover .del-item { opacity: 1; }
+
+        .wa-float { transition: transform .15s ease; }
+        .wa-float:hover { transform: translateY(-2px); }
+
+        .add-pkg-btn:hover { background: ${COLORS.marun} !important; color: ${COLORS.gading} !important; }
+        .add-pkg-btn:hover svg { color: ${COLORS.gading} !important; }
+
+        @media (max-width: 640px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-arch { order: -1; }
         }
+      `}</style>
 
-        function renderPackages() {
-            const container = document.getElementById('packageContainer');
-            container.innerHTML = '';
+      {/* ---------- NAV ---------- */}
+      <nav
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "22px 6vw",
+          maxWidth: 1160,
+          margin: "0 auto",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: "50%",
+              background: COLORS.marun,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Sparkles size={16} color={COLORS.emasMuda} />
+          </div>
+          <Editable
+            as="span"
+            value={studioName}
+            onChange={setStudioName}
+            style={{ fontFamily: "'Fraunces', serif", fontSize: 18, fontWeight: 600, color: COLORS.marun }}
+          />
+        </div>
+        <a
+          href={`https://wa.me/${waNumber}`}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "9px 18px",
+            borderRadius: 999,
+            background: COLORS.marun,
+            color: COLORS.gading,
+            fontSize: 13,
+            fontWeight: 600,
+            textDecoration: "none",
+          }}
+        >
+          <MessageCircle size={15} /> Hubungi
+        </a>
+      </nav>
 
-            const filteredPackages = currentCategory === 'Semua' 
-                ? packages 
-                : packages.filter(p => p.category === currentCategory);
+      {/* ---------- HERO ---------- */}
+      <header
+        className="hero-grid"
+        style={{
+          maxWidth: 1160,
+          margin: "0 auto",
+          padding: "28px 6vw 10px",
+          display: "grid",
+          gridTemplateColumns: "1.1fr 0.9fr",
+          gap: 48,
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Editable
+            as="p"
+            value={eyebrow}
+            onChange={setEyebrow}
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: COLORS.emas,
+              margin: "0 0 14px",
+            }}
+          />
+          <Editable
+            as="h1"
+            value={heroTitle}
+            onChange={setHeroTitle}
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: "clamp(34px, 5vw, 54px)",
+              fontWeight: 600,
+              fontStyle: "italic",
+              lineHeight: 1.1,
+              color: COLORS.cokelat,
+              margin: "0 0 18px",
+            }}
+          />
+          <Editable
+            as="p"
+            value={heroDesc}
+            onChange={setHeroDesc}
+            style={{
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: COLORS.cokelatMuda,
+              maxWidth: 460,
+              margin: "0 0 26px",
+            }}
+          />
+          <a
+            href="#paket"
+            style={{
+              display: "inline-block",
+              padding: "13px 30px",
+              borderRadius: 999,
+              border: `1.5px solid ${COLORS.marun}`,
+              color: COLORS.marun,
+              fontSize: 14,
+              fontWeight: 600,
+              textDecoration: "none",
+              letterSpacing: "0.02em",
+            }}
+          >
+            Lihat Paket Riasan
+          </a>
+        </div>
+        <div className="hero-arch">
+          <ArchUpload image={heroImage} onUpload={setHeroImage} height={380} label="Unggah foto andalanmu di sini" />
+        </div>
+      </header>
 
-            filteredPackages.forEach(pkg => {
-                let includesHtml = pkg.includes.map(item => `<li>${item}</li>`).join('');
-                
-                const waMessage = `Halo kak Admin *${STUDIO_NAME}*,\n\nSaya tertarik booking paket di katalog ini:\n\n📌 *${pkg.title}*\n🏷️ *Harga:* ${pkg.price}\n\nApakah jadwal acara untuk tanggal [Sebutkan Tanggal] masih tersedia?`;
-                const waLink = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
+      <Divider />
 
-                const cardHtml = `
-                    <div class="package-card">
-                        <div class="package-image-box" onclick="openImageModal('${pkg.image}')">
-                            <img src="${pkg.image}" alt="${pkg.title}">
-                            <div class="zoom-badge">🔍 Klik Foto untuk Zoom</div>
-                        </div>
+      {/* ---------- GALERI ---------- */}
+      <section style={{ maxWidth: 1160, margin: "0 auto", padding: "0 6vw 12px" }}>
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: COLORS.emas,
+            textAlign: "center",
+            margin: "0 0 8px",
+          }}
+        >
+          Portofolio
+        </p>
+        <h2
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontSize: 28,
+            fontWeight: 600,
+            textAlign: "center",
+            color: COLORS.marun,
+            margin: "0 0 30px",
+          }}
+        >
+          Galeri Karya
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: 20,
+          }}
+        >
+          {gallery.map((g) => (
+            <ArchUpload key={g.id} image={g.image} onUpload={(img) => updateGalleryImg(g.id, img)} height={180} label="Unggah karya" />
+          ))}
+        </div>
+      </section>
 
-                        <div class="package-body">
-                            <div class="package-title">${pkg.title}</div>
-                            <div class="package-price">${pkg.price}</div>
-                            <div class="package-desc">${pkg.desc}</div>
-                            <ul class="package-includes">
-                                ${includesHtml}
-                            </ul>
-                            <a href="${waLink}" target="_blank" style="text-decoration: none;">
-                                <button class="btn-book">
-                                    💬 Booking via WhatsApp
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', cardHtml);
-            });
-        }
+      <Divider />
 
-        // FUNGSI ZOOM FOTO FULLSCREEN
-        function openImageModal(imgSrc) {
-            document.getElementById('modalImgSrc').src = imgSrc;
-            document.getElementById('imageModal').classList.add('active');
-        }
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.remove('active');
-        }
+      {/* ---------- PAKET ---------- */}
+      <section id="paket" style={{ maxWidth: 1160, margin: "0 auto", padding: "0 6vw" }}>
+        <p
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: COLORS.emas,
+            textAlign: "center",
+            margin: "0 0 8px",
+          }}
+        >
+          Investasi Kecantikanmu
+        </p>
+        <h2
+          style={{
+            fontFamily: "'Fraunces', serif",
+            fontSize: 28,
+            fontWeight: 600,
+            textAlign: "center",
+            color: COLORS.marun,
+            margin: "0 0 34px",
+          }}
+        >
+          Pilih Paket Riasan
+        </h2>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: 26,
+          }}
+        >
+          {packages.map((pkg) => (
+            <PackageCard
+              key={pkg.id}
+              pkg={pkg}
+              onChange={(updated) => updatePackage(pkg.id, updated)}
+              onRemove={() => removePackage(pkg.id)}
+            />
+          ))}
+          <button
+            onClick={addPackage}
+            className="add-pkg-btn"
+            style={{
+              minHeight: 260,
+              borderRadius: 18,
+              border: `1.5px dashed ${COLORS.emas}`,
+              background: "transparent",
+              color: COLORS.marun,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              cursor: "pointer",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+              fontSize: 14,
+              fontWeight: 600,
+              transition: "background .15s, color .15s",
+            }}
+          >
+            <Plus size={22} />
+            Tambah Paket
+          </button>
+        </div>
+      </section>
 
-        // JALANKAN SAAT DIBUKA
-        renderCategories();
-        renderPackages();
-    </script>
-</body>
-</html>
+      {/* ---------- FOOTER / KONTAK ---------- */}
+      <footer style={{ maxWidth: 1160, margin: "70px auto 0", padding: "0 6vw" }}>
+        <div
+          style={{
+            background: COLORS.marun,
+            borderRadius: 22,
+            padding: "40px 6vw",
+            textAlign: "center",
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontStyle: "italic",
+              fontSize: 26,
+              color: COLORS.gading,
+              margin: "0 0 10px",
+            }}
+          >
+            Siap tampil cantik di hari spesialmu?
+          </h3>
+          <p style={{ color: COLORS.blush, fontSize: 14, margin: "0 0 22px" }}>
+            Chat sekarang untuk cek jadwal dan konsultasi gratis.
+          </p>
+          <a
+            href={`https://wa.me/${waNumber}`}
+            target="_blank"
+            rel="noreferrer"
+            className="wa-float"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "13px 30px",
+              borderRadius: 999,
+              background: COLORS.emas,
+              color: COLORS.marunGelap,
+              fontSize: 14,
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            <MessageCircle size={16} /> Chat via WhatsApp
+          </a>
+          <p style={{ marginTop: 18, fontSize: 12, color: COLORS.blush, opacity: 0.85 }}>
+            Klik nomor untuk edit —{" "}
+            <Editable
+              as="span"
+              value={waNumber}
+              onChange={setWaNumber}
+              style={{ color: COLORS.emasMuda, fontWeight: 600 }}
+            />
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
