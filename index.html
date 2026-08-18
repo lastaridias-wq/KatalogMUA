@@ -19,6 +19,8 @@
     --cokelat:#2E1A14;
     --cokelat-muda:#7A6A5F;
     --blush:#EFD9D3;
+    --merah-limit:#B71C1C;
+    --merah-bg:#FFCDD2;
   }
   *{box-sizing:border-box;}
   body{
@@ -42,6 +44,43 @@
   body:not(.edit-mode) .add-item-btn,
   body:not(.edit-mode) .add-pkg-btn,
   body:not(.edit-mode) .arch-edit-dot{ display:none !important; }
+
+  /* ---- SISTEM LIMIT & WATERMARK ---- */
+  body:not(.edit-mode) .locked-item { display: none !important; } /* Sembunyikan sepenuhnya di publik */
+  
+  .lock-msg, .lock-msg-arch { display: none; }
+  body.edit-mode .locked-item { border: 2px dashed var(--merah-limit) !important; opacity: 0.7; }
+  body.edit-mode .item-row.locked-item { border: none !important; opacity: 0.5; color: var(--merah-limit); }
+  
+  body.edit-mode .locked-item .lock-msg {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--merah-bg); color: var(--merah-limit); font-size: 11px; font-weight: 700;
+    padding: 6px; border-radius: 8px; margin-top: 10px; text-align: center;
+  }
+  body.edit-mode .locked-item .lock-msg-arch {
+    display: flex; position: absolute; bottom: 5px; left: 5px; right: 5px;
+    background: var(--merah-bg); color: var(--merah-limit); font-size: 10px; font-weight: 700;
+    padding: 4px; border-radius: 4px; justify-content: center; z-index: 10; text-align: center;
+  }
+
+  .watermark {
+    text-align: center; font-size: 11px; color: var(--cokelat-muda);
+    padding: 20px 0 100px; background: var(--krem);
+  }
+  .watermark span { font-weight: 700; color: var(--marun); letter-spacing: 0.5px; }
+  body.pro-mode .watermark { display: none !important; } /* Hilang jika PRO */
+
+  /* Notifikasi Banner Akun */
+  .pro-badge-wrap { text-align: center; margin: 10px 0 0; display: none; }
+  body.edit-mode .pro-badge-wrap { display: block; }
+  .pro-badge {
+    display: inline-block; padding: 6px 14px; border-radius: 20px;
+    font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;
+  }
+  .pro-badge:hover { transform: scale(1.02); }
+  .pro-badge.trial { background: #FFF59D; color: #E65100; border: 1px solid #FBC02D; }
+  .pro-badge.free { background: var(--merah-bg); color: var(--merah-limit); border: 1px solid #EF9A9A; }
+  .pro-badge.pro { background: #C8E6C9; color: #1B5E20; border: 1px solid #A5D6A7; cursor: default;}
 
   .wrap{max-width:1160px;margin:0 auto;padding-left:6vw;padding-right:6vw;}
 
@@ -115,7 +154,7 @@
   .add-pkg-btn svg{width:22px;height:22px;}
 
   /* --- Footer --- */
-  footer{margin:60px auto 100px;}
+  footer{margin:60px auto 40px;}
   .footer-box{background:var(--marun);border-radius:22px;padding:36px 6vw;text-align:center;}
   .footer-title{font-style:italic;font-size:24px;color:var(--gading);margin-bottom:10px;}
   .footer-desc{color:var(--blush);font-size:14px;margin-bottom:22px;}
@@ -128,7 +167,7 @@
   body.edit-mode .wa-number-edit .editable:hover{background:rgba(228,203,134,.18);}
   body.edit-mode .wa-number-edit .editable:focus{background:rgba(228,203,134,.24);box-shadow:0 0 0 1px var(--emas-muda);}
 
-  /* --- Tombol gembok mode edit (khusus pemilik akun) --- */
+  /* --- Tombol gembok --- */
   .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 4px 14px rgba(46,26,20,.3);}
   body.edit-mode .edit-fab{background:var(--marun);}
   .edit-fab svg{width:19px;height:19px;stroke:#fff;}
@@ -136,13 +175,11 @@
   .toast{position:fixed;bottom:78px;right:20px;background:var(--cokelat);color:var(--gading);font-size:13px;font-weight:500;padding:10px 16px;border-radius:10px;z-index:999;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:260px;}
   .toast.show{opacity:1;transform:translateY(0);}
 
-  /* ---- Tablet ---- */
   @media (max-width:860px){
     header.hero{grid-template-columns:1fr;gap:32px;}
     header.hero .arch-hero{order:-1;height:300px;border-radius:150px 150px 10px 10px;}
   }
 
-  /* ---- HP ---- */
   @media (max-width:640px){
     .wrap{padding-left:5.5vw;padding-right:5.5vw;}
     nav{padding:16px 0;}
@@ -159,14 +196,6 @@
     .divider{margin:4px 0 26px;}
     .footer-box{padding:30px 6vw;}
     .footer-title{font-size:21px;}
-    footer{margin:44px auto 90px;}
-  }
-
-  /* ---- HP kecil ---- */
-  @media (max-width:380px){
-    .arch-hero{height:210px;border-radius:105px 105px 10px 10px;}
-    .gallery-grid{grid-template-columns:1fr 1fr;}
-    .arch-gallery{height:110px;border-radius:55px 55px 10px 10px;}
   }
 </style>
 </head>
@@ -184,6 +213,11 @@
     Hubungi
   </a>
 </nav>
+
+<!-- BANNER STATUS AKUN (Tampil saat mode edit) -->
+<div class="pro-badge-wrap wrap">
+    <span id="proBadgeBtn" class="pro-badge">Memeriksa Akun...</span>
+</div>
 
 <header class="hero wrap">
   <div>
@@ -232,6 +266,10 @@
   </div>
 </footer>
 
+<div class="watermark">
+    Katalog Digital dibuat dengan <span>App MUA</span>
+</div>
+
 <button class="edit-fab" id="editFab" title="Mode edit (khusus pemilik)" aria-label="Buka mode edit">
   <svg id="fabIconLocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
   <svg id="fabIconUnlocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
@@ -241,9 +279,10 @@
 <script>
 (function(){
   var STORAGE_KEY = 'katalogMuaData';
-  // Bisa isi lebih dari satu kode di sini, tiap kode dipisah koma.
-  // Contoh: kamu bisa kasih kode berbeda ke tiap pembeli/admin.
   var EDIT_PINS = ['2026', '2026-AYUNDA', '2026-ADMIN'];
+  
+  // DAFTAR KODE AKTIVASI PRO (Berikan kode ini ke MUA yang sudah transfer)
+  var PRO_CODES = ['PRO-2026', 'GENMUA-VIP', 'AYUNDA-PRO']; 
 
   var iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
   var iconPlus = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
@@ -255,31 +294,31 @@
   var editMode = false;
 
   var defaultData = {
+    setupDate: Date.now(),
+    proCode: "",
     studioName: "Studio Rias Ayunda",
     eyebrow: "Makeup Artist & Hairdo Profesional",
     heroTitle: "Riasan yang Bercerita",
     heroDesc: "Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template.",
     heroImage: null,
     waNumber: "6281234567890",
-    gallery: [{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null}],
+    gallery: [{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null}, {id:nextId(),image:null}], // Tambah 1 dummy untuk test limit
     packages: [
       { id:nextId(), image:null, title:"Paket Akad", price:"Rp 1.200.000", items:[
         {id:nextId(),text:"Riasan pengantin akad, natural namun berkarakter"},
         {id:nextId(),text:"Hairdo sanggul modern atau hijab syar'i"},
         {id:nextId(),text:"Retouch 2x selama prosesi berlangsung"},
-        {id:nextId(),text:"Free 1 asisten MUA di hari-H"}
+        {id:nextId(),text:"Free 1 asisten MUA di hari-H"} // Item ke-4 (Kena limit)
       ]},
       { id:nextId(), image:null, title:"Paket Resepsi", price:"Rp 2.500.000", items:[
         {id:nextId(),text:"Riasan pengantin resepsi, efek glowing tahan lama"},
         {id:nextId(),text:"Sanggul + aksesoris kepala lengkap"},
-        {id:nextId(),text:"Ganti riasan untuk 2 sesi acara"},
-        {id:nextId(),text:"Dokumentasi behind the scene untuk kamu"}
+        {id:nextId(),text:"Ganti riasan untuk 2 sesi acara"}
       ]},
       { id:nextId(), image:null, title:"Paket Lamaran", price:"Rp 900.000", items:[
         {id:nextId(),text:"Riasan natural glowing, cocok untuk foto"},
         {id:nextId(),text:"Hairdo simple elegant"},
-        {id:nextId(),text:"Free trial makeup sebelum hari-H"},
-        {id:nextId(),text:"Konsultasi gaya 1x via chat"}
+        {id:nextId(),text:"Free trial makeup sebelum hari-H"}
       ]}
     ]
   };
@@ -288,6 +327,8 @@
   try {
     var saved = localStorage.getItem(STORAGE_KEY);
     data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
+    if(!data.setupDate) { data.setupDate = Date.now(); } // Patch data lama
+    if(data.proCode === undefined) { data.proCode = ""; }
   } catch(e) {
     data = JSON.parse(JSON.stringify(defaultData));
   }
@@ -296,12 +337,63 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){}
   }
 
+  // --- LOGIKA STATUS AKUN (TRIAL, FREE, PRO) ---
+  function getAccountStatus() {
+      if (data.proCode && PRO_CODES.indexOf(data.proCode) !== -1) return 'PRO';
+      var daysUsed = Math.floor((Date.now() - data.setupDate) / (1000 * 60 * 60 * 24));
+      var trialLeft = 7 - daysUsed;
+      if (trialLeft > 0) return 'TRIAL:' + trialLeft;
+      return 'FREE';
+  }
+  
+  function isPremium() {
+      var stat = getAccountStatus();
+      return stat === 'PRO' || stat.indexOf('TRIAL') === 0;
+  }
+
+  function updateProUI() {
+      var stat = getAccountStatus();
+      var badge = document.getElementById('proBadgeBtn');
+      document.body.classList.toggle('pro-mode', isPremium());
+      
+      if(!badge) return;
+      if (stat === 'PRO') {
+          badge.className = 'pro-badge pro';
+          badge.innerHTML = '✨ Akun PRO Aktif (Fitur Tanpa Batas)';
+      } else if (stat.indexOf('TRIAL') === 0) {
+          var days = stat.split(':')[1];
+          badge.className = 'pro-badge trial';
+          badge.innerHTML = '⏱️ Masa Trial Sisa ' + days + ' Hari (Klik utk Upgrade)';
+      } else {
+          badge.className = 'pro-badge free';
+          badge.innerHTML = '🔒 Mode FREE Dibatasi (Klik utk Upgrade PRO)';
+      }
+  }
+
+  // EVENT TOMBOL UPGRADE
+  document.getElementById('proBadgeBtn').addEventListener('click', function(){
+      var stat = getAccountStatus();
+      if (stat === 'PRO') {
+          showToast('Akun Anda sudah PRO!'); return;
+      }
+      var code = window.prompt('Masukkan Kode Aktivasi PRO: \n(Beli via WhatsApp Admin)');
+      if(!code) return;
+      
+      if (PRO_CODES.indexOf(code) !== -1) {
+          data.proCode = code;
+          save(); updateProUI(); renderGallery(); renderPackages();
+          showToast('🎉 Selamat! Katalog Anda sekarang versi PRO tanpa batas.');
+      } else {
+          showToast('❌ Kode aktivasi salah atau tidak valid.');
+      }
+  });
+
   function showToast(msg){
     var t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
   }
 
   function updateWaLinks(){
@@ -376,8 +468,18 @@
   function renderGallery(){
     var grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
-    data.gallery.forEach(function(g){
+    data.gallery.forEach(function(g, idx){
       var el = makeArchElement('arch-gallery', 'Unggah karya');
+      
+      // LOGIKA LIMIT GALLERY (Max 4 untuk Free)
+      if (!isPremium() && idx >= 4) {
+          el.classList.add('locked-item');
+          var msg = document.createElement('div');
+          msg.className = 'lock-msg-arch';
+          msg.innerHTML = '🔒 Disembunyikan (Limit Free)';
+          el.appendChild(msg);
+      }
+
       grid.appendChild(el);
       setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 'Unggah karya');
     });
@@ -387,9 +489,18 @@
     var grid = document.getElementById('pkgGrid');
     grid.innerHTML = '';
 
-    data.packages.forEach(function(pkg){
+    data.packages.forEach(function(pkg, pkgIdx){
       var card = document.createElement('div');
       card.className = 'pkg-card';
+
+      // LOGIKA LIMIT PAKET (Max 2 Paket untuk Free)
+      if (!isPremium() && pkgIdx >= 2) {
+          card.classList.add('locked-item');
+          var lockMsg = document.createElement('div');
+          lockMsg.className = 'lock-msg';
+          lockMsg.innerHTML = '🔒 Paket Disembunyikan di Publik (Limit Free)';
+          card.appendChild(lockMsg);
+      }
 
       var removeBtn = document.createElement('button');
       removeBtn.className = 'pkg-remove';
@@ -439,9 +550,15 @@
 
       function renderItems(){
         itemList.innerHTML = '';
-        pkg.items.forEach(function(it){
+        pkg.items.forEach(function(it, itIdx){
           var row = document.createElement('div');
           row.className = 'item-row';
+
+          // LOGIKA LIMIT ITEM/DETAIL (Max 3 Item per Paket)
+          if (!isPremium() && itIdx >= 3) {
+              row.classList.add('locked-item');
+              row.title = "Item disembunyikan di publik (Limit Free)";
+          }
 
           var bullet = document.createElement('span');
           bullet.className = 'bullet';
@@ -462,8 +579,7 @@
           delBtn.addEventListener('click', function(){
             if(!editMode) return;
             pkg.items = pkg.items.filter(function(x){ return x.id !== it.id; });
-            save();
-            renderItems();
+            save(); renderItems();
           });
           row.appendChild(delBtn);
 
@@ -479,8 +595,7 @@
       addItemBtn.addEventListener('click', function(){
         if(!editMode) return;
         pkg.items.push({ id: nextId(), text: 'Item baru, klik untuk edit' });
-        save();
-        renderItems();
+        save(); renderItems();
       });
       itemsHead.appendChild(addItemBtn);
 
@@ -497,8 +612,7 @@
         id: nextId(), image: null, title: 'Paket Baru', price: 'Rp 0',
         items: [{ id: nextId(), text: 'Klik untuk edit item ini' }]
       });
-      save();
-      renderPackages();
+      save(); renderPackages();
     });
     grid.appendChild(addCard);
   }
@@ -515,6 +629,7 @@
     document.getElementById('fabIconLocked').style.display = v ? 'none' : 'block';
     document.getElementById('fabIconUnlocked').style.display = v ? 'block' : 'none';
     refreshAllEditableAttrs();
+    updateProUI();
   }
 
   document.getElementById('editFab').addEventListener('click', function(){
@@ -522,7 +637,7 @@
       setEditMode(false);
       showToast('Mode edit dimatikan. Perubahan tersimpan.');
     } else {
-      var pin = window.prompt('Masukkan PIN untuk mengedit halaman ini:');
+      var pin = window.prompt('Masukkan PIN Edit Katalog:');
       if(pin === null) return;
       if(EDIT_PINS.indexOf(pin) !== -1){
         setEditMode(true);
@@ -544,6 +659,7 @@
   var heroArch = document.getElementById('heroArch');
   setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 'Unggah foto andalanmu di sini');
 
+  updateProUI();
   renderDivider('divider1');
   renderDivider('divider2');
   renderGallery();
