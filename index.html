@@ -69,8 +69,8 @@
   .logo-mark{width:34px;height:34px;border-radius:50%;background:var(--marun);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
   .logo-mark svg{width:16px;height:16px;stroke:var(--emas-muda);}
   .logo-name{font-size:18px;font-weight:600;color:var(--marun);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .btn-nav{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--marun);color:var(--gading);font-size:13px;font-weight:600;}
-  .btn-nav svg{width:15px;height:15px;stroke:var(--gading);}
+  .btn-nav{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--marun);color:var(--gading);font-size:13px;font-weight:600;}
+  .btn-nav svg{width:15px;height:15px;stroke:var(--gading);flex-shrink:0;}
 
   header.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:20px 0 10px;}
   .eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);margin-bottom:14px;}
@@ -123,13 +123,17 @@
   .item-list{display:flex;flex-direction:column;gap:8px;}
   .add-item-btn{margin-top:10px;align-items:center;gap:6px;background:none;border:none;color:var(--marun);font-size:13px;font-weight:600;cursor:pointer;}
   
-  /* Ukuran tombol tambah diperkecil dan proporsional */
+  /* PERBAIKAN TOMBOL TAMBAH (UKURAN & BENTUK) */
   .add-gal-btn, .add-pkg-btn {
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
     border:1.5px dashed var(--emas); background:transparent; color:var(--marun);
     cursor:pointer; font-size:13px; font-weight:600; width:100%; transition:0.2s; line-height:1.3;
   }
-  .add-gal-btn { min-height:120px; border-radius:16px; padding:12px; }
+  /* Mengunci ukuran ikon tambah agar tidak meledak */
+  .add-gal-btn svg, .add-pkg-btn svg { width:24px; height:24px; flex-shrink:0; margin-bottom:4px; }
+  
+  /* Tombol galeri disamakan dengan bentuk bingkai (arch) */
+  .add-gal-btn { height:180px; border-radius:90px 90px 10px 10px; padding:12px; text-align:center; }
   .add-pkg-btn { min-height:80px; border-radius:18px; padding:16px; }
   .add-gal-btn:hover, .add-pkg-btn:hover { background:var(--marun); color:var(--gading); }
 
@@ -137,7 +141,15 @@
   .footer-box{background:var(--marun);border-radius:22px;padding:36px 6vw;text-align:center;}
   .footer-title{font-style:italic;font-size:24px;color:var(--gading);margin-bottom:10px;}
   .footer-desc{color:var(--blush);font-size:14px;margin-bottom:22px;}
-  .btn-wa{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:999px;background:var(--emas);color:var(--marun-gelap);font-size:14px;font-weight:700;}
+  
+  /* PERBAIKAN TOMBOL CHAT WHATSAPP (AGAR TIDAK BERGESER/NUMPUK) */
+  .btn-wa{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 30px; border-radius:999px; background:var(--emas); color:var(--marun-gelap);
+    font-size:14px; font-weight:700; white-space:nowrap; /* Mencegah teks patah/turun */
+  }
+  .btn-wa svg { width:18px; height:18px; flex-shrink:0; }
+  
   .wa-number-edit{display:none;margin:14px 0 0;font-size:12px;color:var(--blush);}
   body.edit-mode .wa-number-edit{display:block;}
   .wa-number-edit .editable{color:var(--emas-muda);font-weight:600;}
@@ -175,8 +187,14 @@
     .hero-title{font-size: 32px;}
     .arch-hero{height:260px;border-radius:130px 130px 10px 10px;}
     .arch-pkg{height:180px;border-radius:90px 90px 10px 10px;}
+    
+    /* Perbaikan Mobile: Memaksa tinggi arch dan tombol tambah galeri sejajar */
     .arch-gallery{height:140px;border-radius:70px 70px 10px 10px;}
+    .add-gal-btn{height:140px;border-radius:70px 70px 10px 10px;}
+    
+    /* Perbaikan Mobile: Memaksa selalu 2 kolom yang presisi tanpa error perhitungan grid */
     .gallery-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
+    
     .pkg-grid{grid-template-columns:1fr;gap:18px;}
     .btn-outline{width: 100%; text-align: center; padding: 14px 20px;}
   }
@@ -279,7 +297,6 @@
     <p>Tingkatkan ke versi PRO untuk membuka batas maksimal portofolio dan paket riasan.</p>
     <input type="text" id="proInput" placeholder="Masukkan PIN PRO...">
     <div class="modal-actions">
-      <!-- Layout Baru: Batal & Submit Bersebelahan, Tombol WA penuh di bawahnya -->
       <div class="modal-actions-row">
         <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
         <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi</button>
