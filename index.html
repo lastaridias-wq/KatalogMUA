@@ -4,34 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Katalog Digital MUA</title>
-<meta name="description" content="Katalog jasa makeup artist. Lihat portofolio dan pilihan paket riasan.">
+<meta name="description" content="Katalog jasa makeup artist.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --marun:#6B1E23;
-    --marun-gelap:#4A1418;
-    --emas:#C9A227;
-    --emas-muda:#E4CB86;
-    --krem:#F7EDE2;
-    --gading:#FFFBF5;
-    --cokelat:#2E1A14;
-    --cokelat-muda:#7A6A5F;
-    --blush:#EFD9D3;
-    --wa-green:#25D366;
+    --marun:#6B1E23; --marun-gelap:#4A1418; --emas:#C9A227; --emas-muda:#E4CB86;
+    --krem:#F7EDE2; --gading:#FFFBF5; --cokelat:#2E1A14; --cokelat-muda:#7A6A5F;
+    --blush:#EFD9D3; --wa-green:#25D366;
   }
-  html, body {
-    max-width: 100vw;
-    overflow-x: hidden;
-  }
+  html, body { max-width: 100vw; overflow-x: hidden; }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--krem);
-    color:var(--cokelat);
-    font-family:'Plus Jakarta Sans',sans-serif;
-  }
+  body{ margin:0; background:var(--krem); color:var(--cokelat); font-family:'Plus Jakarta Sans',sans-serif; }
   h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
   a{text-decoration:none;}
 
@@ -41,27 +26,25 @@
   body.edit-mode .editable:focus{background:rgba(201,162,39,.16);box-shadow:0 0 0 1px var(--emas);}
   .editable:empty:before{content:attr(data-placeholder);color:var(--cokelat-muda);}
 
-  /* Sembunyikan elemen edit saat bukan mode edit */
-  body:not(.edit-mode) .pkg-remove,
-  body:not(.edit-mode) .gal-remove,
-  body:not(.edit-mode) .item-del,
-  body:not(.edit-mode) .add-item-btn,
-  body:not(.edit-mode) .add-pkg-btn,
-  body:not(.edit-mode) .add-gal-btn,
+  /* SEMBUNYIKAN ELEMEN EDIT JIKA BUKAN MODE EDIT */
+  body:not(.edit-mode) .pkg-remove, body:not(.edit-mode) .gal-remove,
+  body:not(.edit-mode) .item-del, body:not(.edit-mode) .add-item-btn,
+  body:not(.edit-mode) .add-pkg-btn, body:not(.edit-mode) .add-gal-btn,
   body:not(.edit-mode) .arch-edit-dot{ display:none !important; }
 
   .watermark { text-align: center; font-size: 11px; color: var(--cokelat-muda); padding: 20px 0 100px; }
-  .watermark span { font-weight: 700; color: var(--marun); letter-spacing: 0.5px; }
+  .watermark span { font-weight: 700; color: var(--marun); }
   body.pro-mode .watermark { display: none !important; }
 
-  /* BANNER AKUN */
+  /* BANNER AKUN & PUBLIKASI */
   .pro-badge-wrap { text-align: center; margin: 10px 0 0; display: none; }
   body.edit-mode .pro-badge-wrap { display: block; }
-  .pro-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .pro-badge:hover { transform: scale(1.02); }
-  .pro-badge.trial { background: #FFF59D; color: #E65100; border: 1px solid #FBC02D; }
+  .pro-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-bottom:5px;}
   .pro-badge.free { background: var(--merah-bg); color: #B71C1C; border: 1px solid #EF9A9A; }
-  .pro-badge.pro { background: #C8E6C9; color: #1B5E20; border: 1px solid #A5D6A7; cursor: default;}
+  .pro-badge.pro { background: #C8E6C9; color: #1B5E20; border: 1px solid #A5D6A7; }
+  
+  .btn-publish { display: block; width: 90%; max-width: 300px; margin: 5px auto 0; background: var(--cokelat); color: #fff; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; animation: pulse 2s infinite;}
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(46,26,20, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(46,26,20, 0); } 100% { box-shadow: 0 0 0 0 rgba(46,26,20, 0); } }
 
   .wrap{max-width:1160px;margin:0 auto;padding-left:6vw;padding-right:6vw;}
   nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0;}
@@ -70,7 +53,6 @@
   .logo-mark svg{width:16px;height:16px;stroke:var(--emas-muda);}
   .logo-name{font-size:18px;font-weight:600;color:var(--marun);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .btn-nav{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:999px;background:var(--marun);color:var(--gading);font-size:13px;font-weight:600;}
-  .btn-nav svg{width:15px;height:15px;stroke:var(--gading);flex-shrink:0;}
 
   header.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:20px 0 10px;}
   .eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);margin-bottom:14px;}
@@ -87,9 +69,7 @@
   .arch-empty{background:linear-gradient(160deg,var(--blush),var(--krem));}
   .arch-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--marun);text-align:center;padding:0 20px;}
   .arch-placeholder svg{width:26px;height:26px;}
-  .arch-placeholder span{font-size:12px;font-weight:600;}
   .arch-edit-dot{position:absolute;bottom:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(46,26,20,.55);align-items:center;justify-content:center;}
-  .arch-edit-dot svg{width:14px;height:14px;stroke:#fff;}
   body.edit-mode .has-img .arch-edit-dot{display:flex;}
   .arch input[type=file]{display:none;}
 
@@ -101,38 +81,30 @@
   .section-title{font-size:26px;font-weight:600;text-align:center;color:var(--marun);margin:0 0 28px;}
 
   .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;}
-  .gal-remove{position:absolute;top:8px;right:8px;z-index:5;width:24px;height:24px;border-radius:50%;background:rgba(183,28,28,.8);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
-  body.edit-mode .gal-remove{display:flex;}
-  .gal-remove svg{width:12px;height:12px;stroke:#fff;}
-
+  .gal-remove, .pkg-remove{position:absolute;top:8px;right:8px;z-index:5;width:24px;height:24px;border-radius:50%;background:rgba(183,28,28,.8);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
+  body.edit-mode .gal-remove, body.edit-mode .pkg-remove{display:flex;}
   .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
   .pkg-card{background:var(--gading);border-radius:18px;padding:20px;border:1px solid var(--blush);display:flex;flex-direction:column;gap:16px;position:relative;}
-  .pkg-remove{position:absolute;top:10px;right:10px;z-index:5;width:26px;height:26px;border-radius:50%;background:rgba(183,28,28,.8);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
-  body.edit-mode .pkg-remove{display:flex;}
-  .pkg-remove svg{width:14px;height:14px;stroke:#fff;}
+  
   .pkg-title{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--marun);text-align:center;}
   .pkg-price{font-size:15px;font-weight:600;color:var(--emas);text-align:center;margin-top:4px;}
   .pkg-items-head{border-top:1px dashed var(--blush);padding-top:14px;}
   .pkg-items-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cokelat-muda);margin:0 0 10px;}
   .item-row{display:flex;align-items:flex-start;gap:8px;}
   .item-row .bullet{color:var(--marun);font-size:14px;}
-  .item-row .item-text{flex:1;font-size:14px;color:var(--cokelat);line-height:1.5;}
+  .item-row .item-text{flex:1;font-size:14px;line-height:1.5;}
   .item-del{border:none;background:none;color:var(--cokelat-muda);cursor:pointer;padding:2px;}
   body.edit-mode .item-del{display:inline-flex;}
-  .item-del svg{width:13px;height:13px;}
   .item-list{display:flex;flex-direction:column;gap:8px;}
   .add-item-btn{margin-top:10px;align-items:center;gap:6px;background:none;border:none;color:var(--marun);font-size:13px;font-weight:600;cursor:pointer;}
   
-  /* PERBAIKAN TOMBOL TAMBAH (UKURAN & BENTUK) */
+  /* TOMBOL TAMBAH FOTO & PAKET */
   .add-gal-btn, .add-pkg-btn {
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
     border:1.5px dashed var(--emas); background:transparent; color:var(--marun);
-    cursor:pointer; font-size:13px; font-weight:600; width:100%; transition:0.2s; line-height:1.3;
+    cursor:pointer; font-size:13px; font-weight:600; width:100%; transition:0.2s;
   }
-  /* Mengunci ukuran ikon tambah agar tidak meledak */
-  .add-gal-btn svg, .add-pkg-btn svg { width:24px; height:24px; flex-shrink:0; margin-bottom:4px; }
-  
-  /* Tombol galeri disamakan dengan bentuk bingkai (arch) */
+  .add-gal-btn svg, .add-pkg-btn svg { width:24px; height:24px; flex-shrink:0; }
   .add-gal-btn { height:180px; border-radius:90px 90px 10px 10px; padding:12px; text-align:center; }
   .add-pkg-btn { min-height:80px; border-radius:18px; padding:16px; }
   .add-gal-btn:hover, .add-pkg-btn:hover { background:var(--marun); color:var(--gading); }
@@ -141,39 +113,28 @@
   .footer-box{background:var(--marun);border-radius:22px;padding:36px 6vw;text-align:center;}
   .footer-title{font-style:italic;font-size:24px;color:var(--gading);margin-bottom:10px;}
   .footer-desc{color:var(--blush);font-size:14px;margin-bottom:22px;}
-  
-  /* PERBAIKAN TOMBOL CHAT WHATSAPP (AGAR TIDAK BERGESER/NUMPUK) */
-  .btn-wa{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:13px 30px; border-radius:999px; background:var(--emas); color:var(--marun-gelap);
-    font-size:14px; font-weight:700; white-space:nowrap; /* Mencegah teks patah/turun */
-  }
-  .btn-wa svg { width:18px; height:18px; flex-shrink:0; }
-  
+  .btn-wa{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 30px; border-radius:999px; background:var(--emas); color:var(--marun-gelap); font-size:14px; font-weight:700;}
   .wa-number-edit{display:none;margin:14px 0 0;font-size:12px;color:var(--blush);}
   body.edit-mode .wa-number-edit{display:block;}
-  .wa-number-edit .editable{color:var(--emas-muda);font-weight:600;}
 
-  /* CUSTOM MODAL POPUP */
+  /* CUSTOM MODAL */
   .custom-modal { display: none; position: fixed; inset: 0; background: rgba(46,26,20,0.8); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
   .custom-modal.active { display: flex; }
-  .modal-box { background: var(--gading); padding: 24px; border-radius: 18px; width: 100%; max-width: 340px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid var(--emas-muda); }
+  .modal-box { background: var(--gading); padding: 24px; border-radius: 18px; width: 100%; max-width: 340px; text-align: center; border: 1px solid var(--emas-muda); }
   .modal-box h3 { font-size: 18px; color: var(--marun); margin-bottom: 8px; }
   .modal-box p { font-size: 13px; color: var(--cokelat-muda); margin-bottom: 20px; line-height: 1.5; }
   .modal-box input { width: 100%; padding: 12px; border: 1.5px solid var(--blush); border-radius: 10px; text-align: center; font-size: 16px; margin-bottom: 16px; font-weight: 600; outline: none; }
-  .modal-box input:focus { border-color: var(--emas); }
-  
-  /* Layout Tombol Modal agar tidak bertumpuk */
   .modal-actions { display: flex; flex-direction: column; gap: 10px; }
   .modal-actions-row { display: flex; gap: 10px; width: 100%; }
-  .btn-modal { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; text-align: center; font-family: inherit; flex: 1; display: inline-flex; justify-content: center; align-items: center; }
+  .btn-modal { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; flex: 1; }
   .btn-cancel { background: var(--blush); color: var(--marun); }
   .btn-submit { background: var(--marun); color: var(--gading); }
-  .btn-wa-modal { width: 100%; background: var(--wa-green); color: #fff; gap: 8px; text-decoration: none; }
-
+  
+  .loading-overlay { display:none; position:fixed; inset:0; background:var(--krem); z-index:9999; flex-direction:column; align-items:center; justify-content:center; color:var(--marun); font-weight:bold; }
+  .loading-overlay.active { display:flex; }
+  
   .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999; box-shadow:0 4px 14px rgba(46,26,20,.3);}
   body.edit-mode .edit-fab{background:var(--marun);}
-  
   .toast{position:fixed;bottom:78px;right:20px;background:var(--cokelat);color:var(--gading);font-size:13px;font-weight:500;padding:10px 16px;border-radius:10px;z-index:999;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;}
   .toast.show{opacity:1;transform:translateY(0);}
 
@@ -187,20 +148,16 @@
     .hero-title{font-size: 32px;}
     .arch-hero{height:260px;border-radius:130px 130px 10px 10px;}
     .arch-pkg{height:180px;border-radius:90px 90px 10px 10px;}
-    
-    /* Perbaikan Mobile: Memaksa tinggi arch dan tombol tambah galeri sejajar */
-    .arch-gallery{height:140px;border-radius:70px 70px 10px 10px;}
-    .add-gal-btn{height:140px;border-radius:70px 70px 10px 10px;}
-    
-    /* Perbaikan Mobile: Memaksa selalu 2 kolom yang presisi tanpa error perhitungan grid */
+    .arch-gallery, .add-gal-btn{height:140px;border-radius:70px 70px 10px 10px;}
     .gallery-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
-    
     .pkg-grid{grid-template-columns:1fr;gap:18px;}
     .btn-outline{width: 100%; text-align: center; padding: 14px 20px;}
   }
 </style>
 </head>
 <body>
+
+<div class="loading-overlay" id="loadingOverlay">Mengambil data katalog...</div>
 
 <nav class="wrap">
   <div class="logo">
@@ -210,45 +167,43 @@
     <span class="logo-name editable" contenteditable="false" data-key="studioName">Studio Rias Ayunda</span>
   </div>
   <a class="btn-nav" id="waNavBtn" href="#" target="_blank" rel="noreferrer">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    Hubungi
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Hubungi
   </a>
 </nav>
 
 <div class="pro-badge-wrap wrap">
     <span id="proBadgeBtn" class="pro-badge" onclick="openProModal()">Memeriksa Akun...</span>
+    <button class="btn-publish" onclick="openPublishModal()">🌎 Simpan & Buat Link Bio</button>
 </div>
 
 <header class="hero wrap">
   <div>
-    <p class="eyebrow editable" contenteditable="false" data-key="eyebrow">Makeup Artist &amp; Hairdo Profesional</p>
+    <p class="eyebrow editable" contenteditable="false" data-key="eyebrow">Makeup Artist & Hairdo</p>
     <h1 class="hero-title editable" contenteditable="false" data-key="heroTitle">Riasan yang Bercerita</h1>
-    <p class="hero-desc editable" contenteditable="false" data-key="heroDesc">Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template.</p>
+    <p class="hero-desc editable" contenteditable="false" data-key="heroDesc">Setiap sapuan kuas punya makna. Diracik khusus untuk wajahmu, bukan template.</p>
     <a class="btn-outline" href="#paket">Lihat Paket Riasan</a>
   </div>
   <div class="arch arch-hero arch-empty" id="heroArch" data-key="heroImage">
     <div class="arch-placeholder">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <span>Unggah foto andalanmu di sini</span>
+      <span>Unggah foto andalan</span>
     </div>
-    <div class="arch-edit-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg></div>
+    <div class="arch-edit-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg></div>
     <input type="file" accept="image/*">
   </div>
 </header>
 
-<div class="divider" id="divider1"></div>
+<div class="divider"></div>
 
 <section class="wrap">
-  <p class="section-label">Portofolio</p>
-  <h2 class="section-title">Galeri Karya</h2>
+  <p class="section-label">Portofolio</p><h2 class="section-title">Galeri Karya</h2>
   <div class="gallery-grid" id="galleryGrid"></div>
 </section>
 
-<div class="divider" id="divider2"></div>
+<div class="divider"></div>
 
 <section class="wrap" id="paket">
-  <p class="section-label">Investasi Kecantikanmu</p>
-  <h2 class="section-title">Pilih Paket Riasan</h2>
+  <p class="section-label">Investasi Kecantikanmu</p><h2 class="section-title">Pilih Paket Riasan</h2>
   <div class="pkg-grid" id="pkgGrid"></div>
 </section>
 
@@ -256,55 +211,54 @@
   <div class="footer-box">
     <h3 class="footer-title">Siap tampil cantik di hari spesialmu?</h3>
     <p class="footer-desc">Chat sekarang untuk cek jadwal dan konsultasi gratis.</p>
-    <a class="btn-wa" id="waFooterBtn" href="#" target="_blank" rel="noreferrer">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Chat via WhatsApp
-    </a>
-    <p class="wa-number-edit" id="waNumberEditWrap">
-      Nomor WhatsApp: <span class="editable" contenteditable="false" id="waNumberField" data-key="waNumber">6281234567890</span>
-    </p>
+    <a class="btn-wa" id="waFooterBtn" href="#" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat via WhatsApp</a>
+    <p class="wa-number-edit">Nomor WhatsApp: <span class="editable" contenteditable="false" id="waNumberField" data-key="waNumber">6281234567890</span></p>
   </div>
 </footer>
 
-<div class="watermark">
-    Katalog Digital dibuat dengan <span>App MUA</span>
-</div>
+<div class="watermark">Katalog Digital dibuat dengan <span>App MUA</span></div>
 
-<button class="edit-fab" onclick="handleFabClick()" title="Mode edit (khusus pemilik)">
-  <svg id="fabIconLocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-  <svg id="fabIconUnlocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+<!-- FAB ICON: Jika melihat punya orang lain, tombol ini disembunyikan -->
+<button class="edit-fab" id="fabBtn" onclick="handleFabClick()" title="Mode edit (khusus pemilik)">
+  <svg id="fabIconLocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  <svg id="fabIconUnlocked" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
 </button>
 
-<!-- CUSTOM MODAL: PIN EDIT -->
+<!-- MODAL PIN -->
 <div id="pinModal" class="custom-modal">
   <div class="modal-box">
     <h3>Mode Editor Studio</h3>
-    <p>Masukkan PIN Akses untuk mengubah foto dan harga paket.</p>
+    <p>Masukkan PIN Akses untuk mulai mengedit katalog Anda sendiri.</p>
     <input type="text" id="pinInput" placeholder="Ketik PIN Anda..." autocomplete="off">
-    <div class="modal-actions">
-      <div class="modal-actions-row">
-        <button class="btn-modal btn-cancel" onclick="closeModal('pinModal')">Batal</button>
-        <button class="btn-modal btn-submit" onclick="verifyPin()">Buka Akses</button>
-      </div>
+    <div class="modal-actions-row">
+      <button class="btn-modal btn-cancel" onclick="closeModal('pinModal')">Batal</button>
+      <button class="btn-modal btn-submit" onclick="verifyPin()">Buka Akses</button>
     </div>
   </div>
 </div>
 
-<!-- CUSTOM MODAL: KODE PRO -->
+<!-- MODAL PRO -->
 <div id="proModal" class="custom-modal">
   <div class="modal-box">
     <h3>Limit Gratis Tercapai 🔒</h3>
-    <p>Tingkatkan ke versi PRO untuk membuka batas maksimal portofolio dan paket riasan.</p>
+    <p>Tingkatkan ke versi PRO untuk membuka batas maksimal galeri dan paket.</p>
     <input type="text" id="proInput" placeholder="Masukkan PIN PRO...">
-    <div class="modal-actions">
-      <div class="modal-actions-row">
-        <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
-        <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi</button>
-      </div>
-      <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20ingin%20upgrade%20katalog%20MUA%20saya%20ke%20versi%20PRO" target="_blank" class="btn-modal btn-wa-modal" id="waProBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Pesan PIN PRO
-      </a>
+    <div class="modal-actions-row">
+      <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
+      <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PUBLISH LINK -->
+<div id="publishModal" class="custom-modal">
+  <div class="modal-box">
+    <h3>Buat Link Bio Anda 🔗</h3>
+    <p>Masukkan username unik (tanpa spasi). Link ini yang akan dipasang di Bio IG/TikTok Anda.</p>
+    <input type="text" id="usernameInput" placeholder="contoh: ayunda-makeup" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'')">
+    <div class="modal-actions-row">
+      <button class="btn-modal btn-cancel" onclick="closeModal('publishModal')">Batal</button>
+      <button class="btn-modal btn-submit" id="btnPublishAction" onclick="publishCatalog()">Buat Link</button>
     </div>
   </div>
 </div>
@@ -312,149 +266,122 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// --- KONFIGURASI DATABASE GOOGLE APPS SCRIPT ---
+// PENTING: Ganti tulisan di dalam tanda kutip dengan URL Web App Anda dari Langkah 1
+var APPS_SCRIPT_URL = "MASUKKAN_URL_WEB_APP_ANDA_DI_SINI";
+
 (function(){
   var STORAGE_KEY = 'katalogMuaData';
-  var EDIT_PINS = ['2026', '2026-AYUNDA', '2026-ADMIN'];
-  var PRO_CODES = ['PRO-2026', 'GENMUA-VIP', 'AYUNDA-PRO', '2026-PRO']; 
-
-  var iconTrash = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
-  var iconPlus = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>';
-  var iconCamera = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
-  var iconPencil = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>';
+  var EDIT_PINS = ['2026'];
+  var PRO_CODES = ['PRO-2026', 'GENMUA-VIP', 'AYUNDA-PRO']; 
+  
+  // Deteksi URL Parameter untuk melihat katalog orang lain
+  var urlParams = new URLSearchParams(window.location.search);
+  var viewerId = urlParams.get('id'); // Contoh: web.com/?id=ayunda
+  var isViewerMode = viewerId ? true : false;
 
   var idCounter = 200; function nextId(){ return idCounter++; }
   var editMode = false;
+  var data = {};
 
   var defaultData = {
-    setupDate: Date.now(), proCode: "", studioName: "Studio Rias Ayunda",
-    eyebrow: "Makeup Artist & Hairdo Profesional", heroTitle: "Riasan yang Bercerita",
-    heroDesc: "Setiap sapuan kuas punya makna — dari akad yang khidmat sampai resepsi yang meriah. Diracik khusus untuk wajahmu, bukan template.",
+    setupDate: Date.now(), proCode: "", studioName: "Studio MUA Anda",
+    eyebrow: "Makeup Artist & Hairdo", heroTitle: "Nama Katalog Anda",
+    heroDesc: "Klik teks ini untuk mengubah deskripsi sesuai dengan gaya dan karakter studio Anda.",
     heroImage: null, waNumber: "6281234567890",
     gallery: [{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null}], 
     packages: [
-      { id:nextId(), image:null, title:"Paket Akad", price:"Rp 1.200.000", items:[
-        {id:nextId(),text:"Riasan pengantin akad, natural namun berkarakter"},
-        {id:nextId(),text:"Hairdo sanggul modern atau hijab syar'i"},
-        {id:nextId(),text:"Retouch 2x selama prosesi berlangsung"}
-      ]},
-      { id:nextId(), image:null, title:"Paket Resepsi", price:"Rp 2.500.000", items:[
-        {id:nextId(),text:"Riasan pengantin resepsi, efek glowing tahan lama"},
-        {id:nextId(),text:"Sanggul + aksesoris kepala lengkap"}
-      ]}
+      { id:nextId(), image:null, title:"Paket Akad", price:"Rp 1.000.000", items:[ {id:nextId(),text:"Riasan pengantin natural"}, {id:nextId(),text:"Hairdo / Hijab"} ]}
     ]
   };
 
-  var data;
-  try {
-    var saved = localStorage.getItem(STORAGE_KEY);
-    data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
-    if(!data.setupDate) { data.setupDate = Date.now(); }
-    if(data.proCode === undefined) { data.proCode = ""; }
-  } catch(e) { data = JSON.parse(JSON.stringify(defaultData)); }
+  // FUNGSI KOMPRESI GAMBAR (Penting agar Database Google Sheets tidak error)
+  function compressImage(base64Str, callback) {
+      var img = new Image();
+      img.src = base64Str;
+      img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var MAX_WIDTH = 600; // Maksimal lebar 600px untuk hemat database
+          var width = img.width; var height = img.height;
+          
+          if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+          canvas.width = width; canvas.height = height;
+          
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          callback(canvas.toDataURL('image/jpeg', 0.6)); // Kualitas 60%
+      };
+  }
 
-  function save(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e){} }
+  function save(){ if(!isViewerMode) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } }
 
   function getAccountStatus() {
       if (data.proCode && PRO_CODES.indexOf(data.proCode) !== -1) return 'PRO';
-      var daysUsed = Math.floor((Date.now() - data.setupDate) / (1000 * 60 * 60 * 24));
-      var trialLeft = 7 - daysUsed;
-      if (trialLeft > 0) return 'TRIAL:' + trialLeft;
       return 'FREE';
   }
-  
-  function isPremium() {
-      var stat = getAccountStatus();
-      return stat === 'PRO' || stat.indexOf('TRIAL') === 0;
-  }
+  function isPremium() { return getAccountStatus() === 'PRO'; }
 
   function updateProUI() {
       var stat = getAccountStatus();
       var badge = document.getElementById('proBadgeBtn');
       document.body.classList.toggle('pro-mode', isPremium());
-      
       if(!badge) return;
-      if (stat === 'PRO') {
-          badge.className = 'pro-badge pro';
-          badge.innerHTML = '✨ Akun PRO Aktif (Fitur Tanpa Batas)';
-      } else if (stat.indexOf('TRIAL') === 0) {
-          var days = stat.split(':')[1];
-          badge.className = 'pro-badge trial';
-          badge.innerHTML = '⏱️ Masa Trial Sisa ' + days + ' Hari (Klik utk Upgrade)';
-      } else {
-          badge.className = 'pro-badge free';
-          badge.innerHTML = '🔒 Mode FREE Dibatasi (Klik utk Upgrade PRO)';
-      }
+      if (stat === 'PRO') { badge.className = 'pro-badge pro'; badge.innerHTML = '✨ Akun PRO Aktif'; } 
+      else { badge.className = 'pro-badge free'; badge.innerHTML = '🔒 Mode FREE Dibatasi'; }
   }
 
   function setEditMode(mode) {
+    if(isViewerMode) return; // Mode viewer tidak bisa diedit
     editMode = mode;
     document.body.classList.toggle('edit-mode', mode);
-    var editables = document.querySelectorAll('.editable');
-    editables.forEach(function(el) { el.contentEditable = mode; });
+    document.querySelectorAll('.editable').forEach(function(el) { el.contentEditable = mode; });
     document.getElementById('fabIconLocked').style.display = mode ? 'none' : 'block';
     document.getElementById('fabIconUnlocked').style.display = mode ? 'block' : 'none';
-    renderGallery();
-    renderPackages();
+    renderGallery(); renderPackages();
   }
 
   // --- MODAL HANDLING ---
   window.handleFabClick = function() {
     if(editMode){
-      setEditMode(false); showToast('Mode edit dimatikan. Perubahan tersimpan.');
+      setEditMode(false); showToast('Mode edit dimatikan. Jangan lupa Simpan & Buat Link!');
     } else {
       document.getElementById('pinModal').classList.add('active');
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinInput').focus();
     }
   };
-
   window.verifyPin = function() {
     var pin = document.getElementById('pinInput').value.trim();
     if(EDIT_PINS.indexOf(pin) !== -1){
       closeModal('pinModal'); setEditMode(true);
-      showToast('Mode edit aktif. Ketuk teks atau foto untuk mengubahnya.');
+      showToast('Mode edit aktif. Klik area teks/foto untuk mengubah.');
     } else { showToast('❌ PIN salah.'); }
   };
-
-  window.openProModal = function() {
-    if (getAccountStatus() === 'PRO') { showToast('Akun Anda sudah PRO!'); return; }
-    document.getElementById('proModal').classList.add('active');
-    document.getElementById('proInput').value = '';
-    document.getElementById('proInput').focus();
-  };
-
+  window.openProModal = function() { document.getElementById('proModal').classList.add('active'); };
   window.verifyProCode = function() {
     var code = document.getElementById('proInput').value.trim().toUpperCase();
     if (PRO_CODES.indexOf(code) !== -1) {
       data.proCode = code; save(); updateProUI(); renderGallery(); renderPackages();
-      closeModal('proModal'); showToast('🎉 Selamat! Katalog versi PRO aktif.');
+      closeModal('proModal'); showToast('🎉 PRO Aktif!');
     } else { showToast('❌ PIN PRO tidak valid.'); }
   };
-
   window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
+  window.openPublishModal = function() { document.getElementById('publishModal').classList.add('active'); };
 
-  function showToast(msg){
+  function showToast(msg, duration){
     var t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
+    t.innerHTML = msg; t.classList.add('show');
     clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+    showToast._timer = setTimeout(function(){ t.classList.remove('show'); }, duration || 2500);
   }
 
   function updateWaLinks(){
     var url = 'https://wa.me/' + data.waNumber.replace(/[^0-9]/g,'');
-    document.getElementById('waNavBtn').href = url;
-    document.getElementById('waFooterBtn').href = url;
-    
-    var urlAdminPro = 'https://wa.me/' + data.waNumber.replace(/[^0-9]/g,'') + '?text=Halo%20Admin,%20saya%20ingin%20upgrade%20katalog%20MUA%20saya%20ke%20versi%20PRO';
-    document.getElementById('waProBtn').href = urlAdminPro;
+    document.getElementById('waNavBtn').href = url; document.getElementById('waFooterBtn').href = url;
   }
 
   function bindEditable(el, key){
     el.textContent = data[key] || '';
     el.addEventListener('blur', function(){
-      if(!editMode) return; 
-      data[key] = el.textContent; 
-      save();
+      if(!editMode) return; data[key] = el.textContent; save();
       if(key === 'waNumber') updateWaLinks();
     });
   }
@@ -475,196 +402,188 @@
     input.addEventListener('change', function(e){
       var file = e.target.files[0]; if(!file) return;
       var reader = new FileReader();
-      reader.onload = function(){ setImage(reader.result); save(); render(); };
+      reader.onload = function(){ 
+          // KOMPRESI GAMBAR SEBELUM DISIMPAN!
+          compressImage(reader.result, function(compressedStr) {
+              setImage(compressedStr); save(); render();
+          });
+      };
       reader.readAsDataURL(file);
     });
     render();
   }
 
   function makeArchElement(className, label){
-    var div = document.createElement('div');
-    div.className = 'arch ' + className + ' arch-empty';
-    div.innerHTML =
-      '<div class="arch-placeholder">' + iconCamera + '<span>' + label + '</span></div>' +
-      '<div class="arch-edit-dot">' + iconPencil + '</div>' +
-      '<input type="file" accept="image/*">';
+    var div = document.createElement('div'); div.className = 'arch ' + className + ' arch-empty';
+    var iconCam = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+    div.innerHTML = '<div class="arch-placeholder">' + iconCam + '<span>' + label + '</span></div>' +
+      '<div class="arch-edit-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg></div><input type="file" accept="image/*">';
     return div;
   }
 
   function renderGallery(){
-    var grid = document.getElementById('galleryGrid');
-    grid.innerHTML = '';
-    
+    var grid = document.getElementById('galleryGrid'); grid.innerHTML = '';
     data.gallery.forEach(function(g, idx){
-      // LOGIKA LIMIT TAMPILAN: Sembunyikan item ke-5 dan seterusnya di versi Free
       if (!isPremium() && idx >= 4) return;
-
-      var wrapper = document.createElement('div');
-      wrapper.style.position = 'relative';
+      var wrapper = document.createElement('div'); wrapper.style.position = 'relative';
       var el = makeArchElement('arch-gallery', 'Unggah karya');
-      
-      var removeBtn = document.createElement('button');
-      removeBtn.className = 'gal-remove';
-      removeBtn.innerHTML = iconTrash;
+      var removeBtn = document.createElement('button'); removeBtn.className = 'gal-remove';
+      removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
       removeBtn.addEventListener('click', function(e){
-        e.stopPropagation(); 
-        if(!editMode) return;
-        data.gallery = data.gallery.filter(function(x){ return x.id !== g.id; });
-        save(); renderGallery();
+        e.stopPropagation(); if(!editMode) return;
+        data.gallery = data.gallery.filter(function(x){ return x.id !== g.id; }); save(); renderGallery();
       });
-
-      wrapper.appendChild(el);
-      wrapper.appendChild(removeBtn);
-      grid.appendChild(wrapper);
+      wrapper.appendChild(el); wrapper.appendChild(removeBtn); grid.appendChild(wrapper);
       setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 'Unggah karya');
     });
-
-    // TOMBOL TAMBAH FOTO
-    if(data.gallery.length < 100) {
-      var addBtn = document.createElement('button');
-      addBtn.className = 'add-gal-btn';
-      addBtn.innerHTML = iconPlus + ' Tambah<br>Portofolio';
+    if(data.gallery.length < 100 && !isViewerMode) {
+      var addBtn = document.createElement('button'); addBtn.className = 'add-gal-btn';
+      addBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah<br>Portofolio';
       addBtn.addEventListener('click', function(){
         if(!editMode) return;
-        
-        // Pemicu Popup Limit (Free Limit 4)
-        if (!isPremium() && data.gallery.length >= 4) {
-            openProModal();
-            return;
-        }
-
-        data.gallery.push({ id: nextId(), image: null });
-        save(); renderGallery();
+        if (!isPremium() && data.gallery.length >= 4) { openProModal(); return; }
+        data.gallery.push({ id: nextId(), image: null }); save(); renderGallery();
       });
       grid.appendChild(addBtn);
     }
   }
 
   function renderPackages(){
-    var grid = document.getElementById('pkgGrid'); 
-    grid.innerHTML = '';
-
+    var grid = document.getElementById('pkgGrid'); grid.innerHTML = '';
     data.packages.forEach(function(pkg, pkgIdx){
-      // LOGIKA LIMIT TAMPILAN: Sembunyikan paket ke-3 dan seterusnya di versi Free
       if (!isPremium() && pkgIdx >= 2) return;
-
       var card = document.createElement('div'); card.className = 'pkg-card';
-
-      var removeBtn = document.createElement('button');
-      removeBtn.className = 'pkg-remove'; removeBtn.title = 'Hapus paket';
-      removeBtn.innerHTML = iconTrash;
+      var removeBtn = document.createElement('button'); removeBtn.className = 'pkg-remove';
+      removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
       removeBtn.addEventListener('click', function(){
-        if(!editMode) return; data.packages = data.packages.filter(function(p){ return p.id !== pkg.id; });
-        save(); renderPackages();
+        if(!editMode) return; data.packages = data.packages.filter(function(p){ return p.id !== pkg.id; }); save(); renderPackages();
       });
       card.appendChild(removeBtn);
-
-      var archEl = makeArchElement('arch-pkg', 'Unggah foto hasil riasan');
-      card.appendChild(archEl);
-      setupArch(archEl, function(){ return pkg.image; }, function(v){ pkg.image = v; }, 'Unggah foto hasil riasan');
-
+      var archEl = makeArchElement('arch-pkg', 'Unggah foto riasan'); card.appendChild(archEl);
+      setupArch(archEl, function(){ return pkg.image; }, function(v){ pkg.image = v; }, 'Unggah foto riasan');
       var titleWrap = document.createElement('div'); titleWrap.style.textAlign = 'center';
       var titleEl = document.createElement('h3'); titleEl.className = 'pkg-title editable';
       titleEl.contentEditable = editMode; titleEl.textContent = pkg.title;
       titleEl.addEventListener('blur', function(){ if(!editMode) return; pkg.title = titleEl.textContent; save(); });
       titleWrap.appendChild(titleEl);
-
       var priceEl = document.createElement('p'); priceEl.className = 'pkg-price editable';
       priceEl.contentEditable = editMode; priceEl.textContent = pkg.price;
       priceEl.addEventListener('blur', function(){ if(!editMode) return; pkg.price = priceEl.textContent; save(); });
-      titleWrap.appendChild(priceEl);
-      card.appendChild(titleWrap);
-
+      titleWrap.appendChild(priceEl); card.appendChild(titleWrap);
       var itemsHead = document.createElement('div'); itemsHead.className = 'pkg-items-head';
-      var itemsLabel = document.createElement('p'); itemsLabel.className = 'pkg-items-label';
-      itemsLabel.textContent = 'Yang kamu dapat'; itemsHead.appendChild(itemsLabel);
+      var itemsLabel = document.createElement('p'); itemsLabel.className = 'pkg-items-label'; itemsLabel.textContent = 'Yang kamu dapat'; itemsHead.appendChild(itemsLabel);
       var itemList = document.createElement('div'); itemList.className = 'item-list';
 
       function renderItems(){
         itemList.innerHTML = '';
         pkg.items.forEach(function(it, itIdx){
           var row = document.createElement('div'); row.className = 'item-row';
-          var bullet = document.createElement('span'); bullet.className = 'bullet'; bullet.textContent = '✦';
-          row.appendChild(bullet);
+          var bullet = document.createElement('span'); bullet.className = 'bullet'; bullet.textContent = '✦'; row.appendChild(bullet);
           var textEl = document.createElement('span'); textEl.className = 'item-text editable';
           textEl.contentEditable = editMode; textEl.textContent = it.text;
           textEl.addEventListener('blur', function(){ if(!editMode) return; it.text = textEl.textContent; save(); });
           row.appendChild(textEl);
-
           var delBtn = document.createElement('button'); delBtn.className = 'item-del';
-          delBtn.innerHTML = iconTrash; delBtn.title = 'Hapus item';
+          delBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>';
           delBtn.addEventListener('click', function(){
-            if(!editMode) return; pkg.items = pkg.items.filter(function(x){ return x.id !== it.id; });
-            save(); renderItems();
+            if(!editMode) return; pkg.items = pkg.items.filter(function(x){ return x.id !== it.id; }); save(); renderItems();
           });
           row.appendChild(delBtn); itemList.appendChild(row);
         });
       }
       renderItems(); itemsHead.appendChild(itemList);
-
       var addItemBtn = document.createElement('button'); addItemBtn.className = 'add-item-btn';
-      addItemBtn.innerHTML = iconPlus + ' Tambah yang didapat';
+      addItemBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah item';
       addItemBtn.addEventListener('click', function(){
         if(!editMode) return;
-        
-        // Pemicu Popup Limit Item di dalam Paket (Free limit 3 item/paket)
-        if (!isPremium() && pkg.items.length >= 3) {
-            openProModal();
-            return;
-        }
-
-        pkg.items.push({ id: nextId(), text: 'Keterangan Item...' });
-        save(); renderItems();
+        if (!isPremium() && pkg.items.length >= 3) { openProModal(); return; }
+        pkg.items.push({ id: nextId(), text: 'Keterangan Item...' }); save(); renderItems();
       });
       itemsHead.appendChild(addItemBtn); card.appendChild(itemsHead); grid.appendChild(card);
     });
 
-    // TOMBOL TAMBAH PAKET
-    var addCard = document.createElement('button'); 
-    addCard.className = 'add-pkg-btn';
-    addCard.innerHTML = iconPlus + ' Tambah Paket';
-    addCard.addEventListener('click', function() {
-        if(!editMode) return;
-        
-        // Pemicu Popup Limit Paket (Free Limit 2)
-        if (!isPremium() && data.packages.length >= 2) {
-            openProModal();
-            return;
-        }
+    if(!isViewerMode) {
+      var addCard = document.createElement('button'); addCard.className = 'add-pkg-btn';
+      addCard.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Tambah Paket';
+      addCard.addEventListener('click', function() {
+          if(!editMode) return;
+          if (!isPremium() && data.packages.length >= 2) { openProModal(); return; }
+          data.packages.push({ id: nextId(), image: null, title: "Paket Baru", price: "Rp 0", items: [ {id: nextId(), text: "Keterangan Item..."} ]}); save(); renderPackages();
+      });
+      grid.appendChild(addCard);
+    }
+  }
 
-        data.packages.push({
-            id: nextId(), 
-            image: null, 
-            title: "Paket Baru", 
-            price: "Rp 0", 
-            items: [ {id: nextId(), text: "Keterangan Item..."} ]
-        });
-        save(); 
-        renderPackages();
+  // --- FUNGSI DATABASE (KIRIM DATA KE APPS SCRIPT) ---
+  window.publishCatalog = function() {
+    var username = document.getElementById('usernameInput').value.trim();
+    if(username.length < 3) { alert("Username minimal 3 huruf/angka!"); return; }
+    
+    var btn = document.getElementById('btnPublishAction');
+    btn.innerHTML = "Menyimpan..."; btn.disabled = true;
+    
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ username: username, payload: JSON.stringify(data) })
+    })
+    .then(response => response.json())
+    .then(result => {
+      btn.innerHTML = "Buat Link"; btn.disabled = false;
+      if(result.status === "success") {
+        closeModal('publishModal');
+        // Buat link bio unik
+        var myUrl = window.location.origin + window.location.pathname + "?id=" + username;
+        showToast("✅ Berhasil disimpan! Link katalog Anda: <br><br><b>" + myUrl + "</b><br><br>(Salin link ini ke Bio Anda)", 10000);
+      } else { alert("Terjadi kesalahan."); }
+    })
+    .catch(err => {
+      btn.innerHTML = "Buat Link"; btn.disabled = false;
+      alert("Gagal terhubung ke Database. Pastikan URL Web App benar.");
     });
-    grid.appendChild(addCard);
   }
 
   // --- INISIALISASI AWAL ---
-  function init() {
-    updateWaLinks();
-    updateProUI();
-    renderGallery();
-    renderPackages();
-    
-    var editables = document.querySelectorAll('.editable[data-key]');
-    editables.forEach(function(el){
-      bindEditable(el, el.getAttribute('data-key'));
-    });
-    
+  function renderAll() {
+    updateWaLinks(); updateProUI(); renderGallery(); renderPackages();
+    document.querySelectorAll('.editable[data-key]').forEach(function(el){ bindEditable(el, el.getAttribute('data-key')); });
     var heroArch = document.getElementById('heroArch');
-    if(heroArch) {
-      setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 'Unggah foto andalanmu di sini');
+    if(heroArch) setupArch(heroArch, function(){ return data.heroImage; }, function(v){ data.heroImage = v; }, 'Unggah foto andalan');
+  }
+
+  function init() {
+    if(isViewerMode) {
+      // MODE VIEWER (Klien membuka link unik MUA)
+      document.getElementById('fabBtn').style.display = 'none'; // Sembunyikan gembok edit
+      var overlay = document.getElementById('loadingOverlay');
+      overlay.classList.add('active');
+      
+      fetch(APPS_SCRIPT_URL + "?id=" + viewerId)
+      .then(res => res.json())
+      .then(fetchedData => {
+        if(fetchedData.error) {
+           overlay.innerHTML = "Katalog tidak ditemukan! ❌";
+        } else {
+           data = fetchedData;
+           renderAll();
+           overlay.classList.remove('active');
+        }
+      })
+      .catch(e => { overlay.innerHTML = "Gagal memuat katalog ❌"; });
+      
+    } else {
+      // MODE KREATOR (MUA membuat/mengedit katalognya sendiri)
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
+        if(!data.setupDate) { data.setupDate = Date.now(); }
+        if(data.proCode === undefined) { data.proCode = ""; }
+      } catch(e) { data = JSON.parse(JSON.stringify(defaultData)); }
+      renderAll();
     }
   }
 
   init();
-})();
+})(); 
 </script>
 </body>
 </html>
