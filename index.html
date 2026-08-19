@@ -19,8 +19,6 @@
     --cokelat:#2E1A14;
     --cokelat-muda:#7A6A5F;
     --blush:#EFD9D3;
-    --merah-limit:#B71C1C;
-    --merah-bg:#FFCDD2;
     --wa-green:#25D366;
   }
   html, body {
@@ -43,30 +41,14 @@
   body.edit-mode .editable:focus{background:rgba(201,162,39,.16);box-shadow:0 0 0 1px var(--emas);}
   .editable:empty:before{content:attr(data-placeholder);color:var(--cokelat-muda);}
 
+  /* Sembunyikan elemen edit saat bukan mode edit */
   body:not(.edit-mode) .pkg-remove,
   body:not(.edit-mode) .gal-remove,
   body:not(.edit-mode) .item-del,
   body:not(.edit-mode) .add-item-btn,
   body:not(.edit-mode) .add-pkg-btn,
+  body:not(.edit-mode) .add-gal-btn,
   body:not(.edit-mode) .arch-edit-dot{ display:none !important; }
-
-  /* SISTEM LIMIT & WATERMARK */
-  body:not(.edit-mode) .locked-item { display: none !important; } 
-  .lock-msg, .lock-msg-arch { display: none; }
-  
-  body.edit-mode .locked-item { border: 2px dashed var(--merah-limit) !important; opacity: 0.7; }
-  body.edit-mode .item-row.locked-item { border: none !important; opacity: 0.5; color: var(--merah-limit); }
-  
-  body.edit-mode .locked-item .lock-msg {
-    display: flex; align-items: center; justify-content: center;
-    background: var(--merah-bg); color: var(--merah-limit); font-size: 11px; font-weight: 700;
-    padding: 6px; border-radius: 8px; margin-top: 10px; text-align: center;
-  }
-  body.edit-mode .locked-item .lock-msg-arch {
-    display: flex; position: absolute; bottom: 5px; left: 5px; right: 5px;
-    background: var(--merah-bg); color: var(--merah-limit); font-size: 10px; font-weight: 700;
-    padding: 4px; border-radius: 4px; justify-content: center; z-index: 10; text-align: center;
-  }
 
   .watermark { text-align: center; font-size: 11px; color: var(--cokelat-muda); padding: 20px 0 100px; }
   .watermark span { font-weight: 700; color: var(--marun); letter-spacing: 0.5px; }
@@ -78,7 +60,7 @@
   .pro-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   .pro-badge:hover { transform: scale(1.02); }
   .pro-badge.trial { background: #FFF59D; color: #E65100; border: 1px solid #FBC02D; }
-  .pro-badge.free { background: var(--merah-bg); color: var(--merah-limit); border: 1px solid #EF9A9A; }
+  .pro-badge.free { background: var(--merah-bg); color: #B71C1C; border: 1px solid #EF9A9A; }
   .pro-badge.pro { background: #C8E6C9; color: #1B5E20; border: 1px solid #A5D6A7; cursor: default;}
 
   .wrap{max-width:1160px;margin:0 auto;padding-left:6vw;padding-right:6vw;}
@@ -118,7 +100,7 @@
   .section-label{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);text-align:center;margin:0 0 8px;}
   .section-title{font-size:26px;font-weight:600;text-align:center;color:var(--marun);margin:0 0 28px;}
 
-  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;}
   .gal-remove{position:absolute;top:8px;right:8px;z-index:5;width:24px;height:24px;border-radius:50%;background:rgba(183,28,28,.8);color:#fff;border:none;align-items:center;justify-content:center;cursor:pointer;}
   body.edit-mode .gal-remove{display:flex;}
   .gal-remove svg{width:12px;height:12px;stroke:#fff;}
@@ -141,9 +123,15 @@
   .item-list{display:flex;flex-direction:column;gap:8px;}
   .add-item-btn{margin-top:10px;align-items:center;gap:6px;background:none;border:none;color:var(--marun);font-size:13px;font-weight:600;cursor:pointer;}
   
-  /* Ukuran tombol tambah diperkecil menjadi lebih proporsional */
-  .add-pkg-btn{min-height:100px; padding:16px; border-radius:18px;border:1.5px dashed var(--emas);background:transparent;color:var(--marun); display:flex; flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;width:100%;}
-  .add-pkg-btn:hover{background:var(--marun);color:var(--gading);}
+  /* Ukuran tombol tambah diperkecil dan proporsional */
+  .add-gal-btn, .add-pkg-btn {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    border:1.5px dashed var(--emas); background:transparent; color:var(--marun);
+    cursor:pointer; font-size:13px; font-weight:600; width:100%; transition:0.2s; line-height:1.3;
+  }
+  .add-gal-btn { min-height:120px; border-radius:16px; padding:12px; }
+  .add-pkg-btn { min-height:80px; border-radius:18px; padding:16px; }
+  .add-gal-btn:hover, .add-pkg-btn:hover { background:var(--marun); color:var(--gading); }
 
   footer{margin:60px auto 40px;}
   .footer-box{background:var(--marun);border-radius:22px;padding:36px 6vw;text-align:center;}
@@ -162,11 +150,14 @@
   .modal-box p { font-size: 13px; color: var(--cokelat-muda); margin-bottom: 20px; line-height: 1.5; }
   .modal-box input { width: 100%; padding: 12px; border: 1.5px solid var(--blush); border-radius: 10px; text-align: center; font-size: 16px; margin-bottom: 16px; font-weight: 600; outline: none; }
   .modal-box input:focus { border-color: var(--emas); }
-  .modal-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-  .btn-modal { flex: 1; min-width: 45%; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; text-align: center; font-family: inherit;}
+  
+  /* Layout Tombol Modal agar tidak bertumpuk */
+  .modal-actions { display: flex; flex-direction: column; gap: 10px; }
+  .modal-actions-row { display: flex; gap: 10px; width: 100%; }
+  .btn-modal { padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; text-align: center; font-family: inherit; flex: 1; display: inline-flex; justify-content: center; align-items: center; }
   .btn-cancel { background: var(--blush); color: var(--marun); }
   .btn-submit { background: var(--marun); color: var(--gading); }
-  .btn-wa-modal { width: 100%; background: var(--wa-green); color: #fff; margin-top: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .btn-wa-modal { width: 100%; background: var(--wa-green); color: #fff; gap: 8px; text-decoration: none; }
 
   .edit-fab{position:fixed;bottom:20px;right:20px;width:48px;height:48px;border-radius:50%;background:var(--cokelat);color:#fff;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999; box-shadow:0 4px 14px rgba(46,26,20,.3);}
   body.edit-mode .edit-fab{background:var(--marun);}
@@ -185,7 +176,7 @@
     .arch-hero{height:260px;border-radius:130px 130px 10px 10px;}
     .arch-pkg{height:180px;border-radius:90px 90px 10px 10px;}
     .arch-gallery{height:140px;border-radius:70px 70px 10px 10px;}
-    .gallery-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);gap:12px;}
     .pkg-grid{grid-template-columns:1fr;gap:18px;}
     .btn-outline{width: 100%; text-align: center; padding: 14px 20px;}
   }
@@ -271,11 +262,12 @@
   <div class="modal-box">
     <h3>Mode Editor Studio</h3>
     <p>Masukkan PIN Akses untuk mengubah foto dan harga paket.</p>
-    <!-- Type text agar tulisan PIN kelihatan -->
     <input type="text" id="pinInput" placeholder="Ketik PIN Anda..." autocomplete="off">
     <div class="modal-actions">
-      <button class="btn-modal btn-cancel" onclick="closeModal('pinModal')">Batal</button>
-      <button class="btn-modal btn-submit" onclick="verifyPin()">Buka Akses</button>
+      <div class="modal-actions-row">
+        <button class="btn-modal btn-cancel" onclick="closeModal('pinModal')">Batal</button>
+        <button class="btn-modal btn-submit" onclick="verifyPin()">Buka Akses</button>
+      </div>
     </div>
   </div>
 </div>
@@ -287,10 +279,13 @@
     <p>Tingkatkan ke versi PRO untuk membuka batas maksimal portofolio dan paket riasan.</p>
     <input type="text" id="proInput" placeholder="Masukkan PIN PRO...">
     <div class="modal-actions">
-      <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
-      <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi PRO</button>
+      <!-- Layout Baru: Batal & Submit Bersebelahan, Tombol WA penuh di bawahnya -->
+      <div class="modal-actions-row">
+        <button class="btn-modal btn-cancel" onclick="closeModal('proModal')">Batal</button>
+        <button class="btn-modal btn-submit" onclick="verifyProCode()">Aktivasi</button>
+      </div>
       <a href="https://wa.me/6281234567890?text=Halo%20Admin,%20saya%20ingin%20upgrade%20katalog%20MUA%20saya%20ke%20versi%20PRO" target="_blank" class="btn-modal btn-wa-modal" id="waProBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Pesan PIN PRO
       </a>
     </div>
@@ -378,13 +373,7 @@
     editMode = mode;
     document.body.classList.toggle('edit-mode', mode);
     var editables = document.querySelectorAll('.editable');
-    editables.forEach(function(el) {
-        if(el.id !== "waNumberField") {
-            el.contentEditable = mode;
-        } else {
-            el.contentEditable = mode; 
-        }
-    });
+    editables.forEach(function(el) { el.contentEditable = mode; });
     document.getElementById('fabIconLocked').style.display = mode ? 'none' : 'block';
     document.getElementById('fabIconUnlocked').style.display = mode ? 'block' : 'none';
     renderGallery();
@@ -490,11 +479,13 @@
     grid.innerHTML = '';
     
     data.gallery.forEach(function(g, idx){
+      // LOGIKA LIMIT TAMPILAN: Sembunyikan item ke-5 dan seterusnya di versi Free
+      if (!isPremium() && idx >= 4) return;
+
       var wrapper = document.createElement('div');
       wrapper.style.position = 'relative';
       var el = makeArchElement('arch-gallery', 'Unggah karya');
       
-      // Tombol hapus galeri
       var removeBtn = document.createElement('button');
       removeBtn.className = 'gal-remove';
       removeBtn.innerHTML = iconTrash;
@@ -508,19 +499,18 @@
       wrapper.appendChild(el);
       wrapper.appendChild(removeBtn);
       grid.appendChild(wrapper);
-      
       setupArch(el, function(){ return g.image; }, function(v){ g.image = v; }, 'Unggah karya');
     });
 
-    // TOMBOL TAMBAH FOTO (LIMIT 4 FOTO GRATIS)
+    // TOMBOL TAMBAH FOTO
     if(data.gallery.length < 100) {
       var addBtn = document.createElement('button');
-      addBtn.className = 'add-pkg-btn';
-      addBtn.innerHTML = iconPlus + ' Tambah Portofolio';
+      addBtn.className = 'add-gal-btn';
+      addBtn.innerHTML = iconPlus + ' Tambah<br>Portofolio';
       addBtn.addEventListener('click', function(){
         if(!editMode) return;
         
-        // Cek Limit Portofolio: Maksimal 4 untuk Free (klik ke-5 muncul Popup PRO)
+        // Pemicu Popup Limit (Free Limit 4)
         if (!isPremium() && data.gallery.length >= 4) {
             openProModal();
             return;
@@ -534,8 +524,13 @@
   }
 
   function renderPackages(){
-    var grid = document.getElementById('pkgGrid'); grid.innerHTML = '';
+    var grid = document.getElementById('pkgGrid'); 
+    grid.innerHTML = '';
+
     data.packages.forEach(function(pkg, pkgIdx){
+      // LOGIKA LIMIT TAMPILAN: Sembunyikan paket ke-3 dan seterusnya di versi Free
+      if (!isPremium() && pkgIdx >= 2) return;
+
       var card = document.createElement('div'); card.className = 'pkg-card';
 
       var removeBtn = document.createElement('button');
@@ -595,7 +590,7 @@
       addItemBtn.addEventListener('click', function(){
         if(!editMode) return;
         
-        // Cek Limit Item di dalam paket
+        // Pemicu Popup Limit Item di dalam Paket (Free limit 3 item/paket)
         if (!isPremium() && pkg.items.length >= 3) {
             openProModal();
             return;
@@ -607,14 +602,14 @@
       itemsHead.appendChild(addItemBtn); card.appendChild(itemsHead); grid.appendChild(card);
     });
 
-    // TOMBOL TAMBAH PAKET (LIMIT 2 PAKET GRATIS)
+    // TOMBOL TAMBAH PAKET
     var addCard = document.createElement('button'); 
     addCard.className = 'add-pkg-btn';
     addCard.innerHTML = iconPlus + ' Tambah Paket';
     addCard.addEventListener('click', function() {
         if(!editMode) return;
         
-        // Cek Limit Paket: Maksimal 2 Paket Free (Klik ke-3 muncul Popup PRO)
+        // Pemicu Popup Limit Paket (Free Limit 2)
         if (!isPremium() && data.packages.length >= 2) {
             openProModal();
             return;
