@@ -284,14 +284,20 @@ var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1mkUOVbmrhaWu5l
   var editMode = false;
   var data = {};
 
-  var defaultData = {
-    setupDate: Date.now(), proCode: "", studioName: "Studio MUA Anda",
-    eyebrow: "Makeup Artist & Hairdo", heroTitle: "Nama Katalog Anda",
-    heroDesc: "Klik teks ini untuk mengubah deskripsi sesuai dengan gaya dan karakter studio Anda.",
-    heroImage: null, waNumber: "6281234567890",
-    gallery: [{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null},{id:nextId(),image:null}], 
+ var defaultData = {
+    setupDate: Date.now(), proCode: "", studioName: "Katalog MUA Master",
+    eyebrow: "Makeup Artist & Hairdo", heroTitle: "Riasan Impianmu",
+    heroDesc: "Ini adalah tampilan contoh. Klik ikon gembok di kanan bawah untuk mulai mengedit dan membuat katalog Anda sendiri.",
+    heroImage: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=600&auto=format&fit=crop", 
+    waNumber: "6281234567890",
+    gallery: [
+      {id:nextId(), image:"https://images.unsplash.com/photo-1516975080661-46bfa20281ba?q=80&w=400&auto=format&fit=crop"},
+      {id:nextId(), image:"https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=400&auto=format&fit=crop"},
+      {id:nextId(), image:"https://images.unsplash.com/photo-1512496015851-a1c8485295c5?q=80&w=400&auto=format&fit=crop"},
+      {id:nextId(), image:"https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=400&auto=format&fit=crop"}
+    ], 
     packages: [
-      { id:nextId(), image:null, title:"Paket Akad", price:"Rp 1.000.000", items:[ {id:nextId(),text:"Riasan pengantin natural"}, {id:nextId(),text:"Hairdo / Hijab"} ]}
+      { id:nextId(), image:"https://images.unsplash.com/photo-1507504031003-b417219a0fde?q=80&w=400&auto=format&fit=crop", title:"Paket Contoh", price:"Rp 1.000.000", items:[ {id:nextId(),text:"Riasan pengantin natural"}, {id:nextId(),text:"Hairdo / Hijab"} ]}
     ]
   };
 
